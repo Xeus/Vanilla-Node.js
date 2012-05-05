@@ -1,0 +1,59 @@
+<!-- TODO: validate data, pword 8 chars -->
+
+<form method="POST" action="/login" name="loginForm" id="loginForm">
+<!-- hidden field will pass in any redirect variables, empty value is OK too -->
+ <input type="hidden" name="redirect" value="<%= redirect %>">
+
+<TABLE WIDTH="100%" HEIGHT="100%" CLASS="login" BORDER=0><TR><TD VALIGN="top" ALIGN="center" WIDTH="50%">
+<BR /><BR /><BR /><BR /><SPAN CLASS="header">admin dashboard</SPAN><BR />
+<SPAN><SPAN ID="statusMsg" STYLE="display: none;" CLASS="infoMsg"></SPAN> &nbsp;</SPAN>
+<TABLE BORDER=0 CELLPADDING=20><TR><TD ALIGN="right">email</TD><TD><input type="text" name="email" id="email" class="login" placeholder=" email@email.com"></TD></TR>
+<TR><TD ALIGN="right">password</TD><TD><input type="password" name="password" id="password" class="login" placeholder=" (at least 8 chars)"></TD></TR>
+<TR><TD COLSPAN=2 ALIGN="center">
+<BUTTON TYPE="submit" NAME="login" CLASS="login" ID="login">login</BUTTON>
+</TD></TR></TABLE>
+</TD><TD VALIGN="top" ALIGN="center" WIDTH="50%">
+<BR /><BR /><BR /><BR /><BR /><BR />
+<BUTTON ID="register" NAME="register" class="login">...or register</BUTTON>
+</form>
+</TD></TR>
+</TABLE>
+
+<SCRIPT TYPE="text/javascript">
+// thx Nijikokun https://gist.github.com/2589227
+var user = {
+  validateCredentials: function (username, password) {
+    return (
+          (!(username += '') || username === '') ? { error: "No email given.", field: 'email' }
+        : (!(username += '') || password === '') ? { error: "No password given.", field: 'pass' }
+        : (username.length < 3)                  ? { error: "Email is less than 3 Characters.", field: 'email' }
+        : (username.indexOf("@") === -1)                 ? { error: "Email not in proper e-mail format.", field: 'email' }
+        : (password.length < 4)                  ? { error: "Password less than 4 characters.", field: 'pass' }
+        : (!/^([a-z0-9-_]+)$/i.test(username))   ? { error: "Email contains invalid characters.", field: 'email' }
+        : false
+    );
+  }
+};
+$(function() {
+	$("#register").click(function(e) {
+  	window.location.href = '/register';
+		e.preventDefault();
+		return false;
+	});
+  $("#login").click(function(e) {
+    $("input").css('background', 'white');
+    var results = user.validateCredentials($('#email').val(), $('#password').val());
+    if (results === true) {
+      $('#loginForm').submit();
+    }
+    else {
+      $("#statusMsg").html(results.error).fadeToggle(300).delay(3000).fadeToggle(300);
+      $("#" + results.field).focus();
+      $("#" + results.field).css('background', 'red');
+    }
+    e.preventDefault();
+    return false;
+  });
+});
+
+</SCRIPT>

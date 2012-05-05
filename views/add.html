@@ -1,0 +1,56 @@
+<FORM NAME="itemForm" ID="itemForm" METHOD="post" ACTION="/admin/items/add">
+
+<INPUT TYPE="hidden" NAME="itemID" VALUE="<%= item.itemID %>" />
+<TABLE BORDER=0 CLASS="itemSingle">
+<TR><TD ALIGN="right" VALIGN="middle">item name</TD>
+<TD><INPUT NAME="itemName" ID="itemName" CLASS="edit ui-widget-content ui-corner-all" VALUE="<%= item.itemName %>"></TD></TR>
+<TR><TD ALIGN="right" VALIGN="middle">item description</TD>
+<TD><TEXTAREA NAME="itemDesc" ID="itemDesc" CLASS="edit ui-widget-content ui-corner-all" ROWS=3 COLS=40><%= item.itemDesc %></TEXTAREA></TD></TR>
+<TR><TD ALIGN="right" VALIGN="middle">cost</TD>
+<TD><INPUT TYPE="text" NAME="itemCost" ID="itemCost" VALUE="<%= item.itemCost %>" CLASS="edit ui-widget-content ui-corner-all" /></TD></TR>
+<TR><TD ALIGN="right" VALIGN="middle">calories</TD>
+<TD><INPUT TYPE="text" NAME="itemCalories" ID="itemCalories" VALUE="<%= item.itemCalories %>" CLASS="edit ui-widget-content ui-corner-all" /></TD></TR>
+</TABLE>
+
+<INPUT NAME="addItem" TYPE="submit" ID="addItem" VALUE="update the item!" CLASS="glow ui-widget-content ui-corner-all" />
+
+<!-- DIV confirms successful AJAX post msg -->
+<DIV ID="updated" CLASS="ui-widget-content ui-corner-all" CLASS="infoMsg"></DIV>
+
+</FORM>
+
+</CENTER>
+
+</TD></TR></TABLE> <!-- /bodyTable -->
+
+<SCRIPT TYPE="text/javascript">
+
+$(function() {
+// loops through all menus and gives them click handlers
+	$('#addItem').click(function(e) {
+		formData = $('#itemForm').serialize();
+		$.ajax({
+			url: "/admin/items/add",
+			type: "POST",
+			data: formData,
+			dataType: "json",
+			success: function(response) {
+				if (response.status === "OK") {
+          $("#updated").fadeToggle(300).html("Item updated!").fadeToggle(300);
+        }
+        else {
+        	$("#updated").fadeToggle(300).html("There was an error updating the item.").fadeToggle(300);
+        }
+      }, 
+      error : function(error) {
+        console.log("There was an error updating the item.");
+        console.log(error);
+        $("#updated").fadeToggle(300).html("There was an error updating the item.").fadeToggle(300);
+      }
+		});
+		e.preventDefault();
+		return false;
+	});
+});
+
+</SCRIPT>

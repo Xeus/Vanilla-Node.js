@@ -1,0 +1,210 @@
+<CENTER>
+
+<H2>Admin Dashboard</H2>
+
+<TABLE ID="bodyTable" WIDTH="90%"><TR><TD VALIGN="top" WIDTH="50%">
+
+<!-- lists out items on the left column -->
+<DIV ID="itemList"></DIV>
+
+</TD>
+<TD VALIGN="top" WIDTH="50%"><CENTER>
+
+<H4>add item</H4>
+
+<FORM NAME="itemForm" ID="itemForm" ACTION="/admin/items/add" METHOD="post">
+<TABLE BORDER=0 CLASS="formTable">
+<TR>
+<TD ALIGN="right">type of item</TD>
+<TD><SELECT NAME="itemType" ID="itemType">
+<% if (itemTypeList !== null) { for (var i=0; i<itemTypeList.length; i++) { %>
+<OPTION VALUE="<%= itemTypeList[i] %>"><%= itemTypeList[i] %></OPTION>
+<% } } else { %>
+<OPTION></OPTION> <% } %>
+</SELECT></TD>
+</TR>
+<TR><TD ALIGN="right">name</TD><TD><INPUT TYPE="text" NAME="itemName" ID="itemName" /></TD></TR>
+<TR><TD ALIGN="right">description</TD><TD><INPUT TYPE="text" NAME="itemDesc" ID="itemDesc" /></TD></TR>
+<TR><TD ALIGN="right">cost</TD><TD><INPUT TYPE="text" NAME="itemCost" ID="itemCost" PLACEHOLDER=" no $, just x.xx" onBlur="validateNum($('#itemCost'));" /></TD></TR>
+<TR><TD ALIGN="right">calories</TD><TD><INPUT TYPE="text" NAME="itemCalories" ID="itemCalories" onBlur="validateNum($('#itemCalories'));" /></TD></TR>
+<TR><TD></TD><TD><BR /><BUTTON CLASS="formTable" TYPE="submit" ID="addItem">submit</BUTTON></TD></TR>
+</TABLE>
+</FORM>
+
+<SPAN><SPAN ID="addItemStatus" CLASS="infoMsg" STYLE="display: none;"></SPAN>&nbsp; </SPAN>
+
+<HR NOSHADE SIZE=1>
+
+<H4>add embed</H4>
+
+<FORM NAME="embedForm" ID="embedForm" ACTION="/admin" METHOD="post">
+
+<TABLE BORDER=0 CLASS="formTable">
+<TR>
+<TD ALIGN="right">belongs to</TD>
+<TD><SELECT NAME="embedMenuList" ID="embedMenuList">
+<% for (var i=0; i<items.length; i++) { %>
+<OPTION VALUE="<%= items[i]._id %>"><%= items[i].itemName %></OPTION>
+<% } %>
+</SELECT></TD>
+</TR>
+<TR><TD ALIGN="right">name</TD><TD><INPUT TYPE="text" NAME="embedName" ID="embedName" /></TD></TR>
+<TR><TD ALIGN="right">description</TD><TD><INPUT TYPE="text" NAME="embedDesc" ID="embedDesc" /></TD></TR>
+<TR><TD ALIGN="right">cost</TD><TD><INPUT TYPE="text" NAME="embedCost" ID="embedCost" PLACEHOLDER=" no $, just x.xx" /></TD></TR>
+<TR><TD></TD><TD><BR /><BUTTON CLASS="formTable" TYPE="submit" NAME="embedSubmit" ID="embedSubmit" STYLE="align:left;">submit</BUTTON></TD></TR>
+</TABLE>
+
+</FORM>
+
+<SPAN><SPAN ID="addEmbedStatus" CLASS="infoMsg" STYLE="display: none;"></SPAN>&nbsp; </SPAN>
+
+</CENTER></TD>
+</TR></TABLE> <!-- /bodyTable -->
+
+<script type="text/javascript">
+
+var validateNum = function(field) {
+    var numericExpression = /^[ ,.,0-9]+$/;
+    if(field.val().match(numericExpression) || (field.val() == "")){
+        field.css('background', 'green');
+    }
+    else {
+        field.focus();
+        $("#addItemStatus").html("You didn't enter a number!").fadeToggle(300).delay(3000).fadeToggle(300);
+        field.css('background', 'red');
+    }
+}
+
+$(function() {
+    $("#itemList").load('/admin/list'); // refreshes left list
+
+	<% for (var i=0; i<items.length; i++) { %>
+	$("#itemLink<%= i %>").click(function() {
+		if ($("#itemLink<%= i %>").html() == "edit") {
+			$("#itemLink<%= i %>").html("hide");
+			$("#itemContents<%= i %>").load("/admin/items/<%= items[i]._id %>/edit");
+            $("#embedContents<%= i %>").load("/admin/embeds/<%= items[i]._id %>/edit");
+        }
+		else {
+			$("#itemLink<%= i %>").html("edit");
+			$("#item<%= i %>").css("border-width", "0px");
+		}
+		$("#itemContents<%= i %>").toggle();
+        $("#embedContents<%= i %>").toggle();
+	});
+	<% } %>
+
+    $('#addItem').click(function(e) {
+        var formData = $('#itemForm').serialize();
+        $.ajax({
+            url: "/admin/items/add",
+            type: "POST",
+            data: formData,
+            dataType: "json",
+            success: function(response) {
+                if (response.status === "OK") {
+                    $("#itemList").load('/admin/list'); // refreshes left list
+                    $("#addItemStatus").html(response.msg).fadeToggle(300).delay(3000).fadeToggle(300);
+                    $("input[name='itemName'],input[name='itemCalories'],input[name='itemCost'],input[name='itemDesc']").val('');
+                    $("input").css('background','white');
+                }
+                else {
+                    $("#addItemStatus").html("There was an error updating the item.").fadeToggle(300).delay(3000).fadeToggle(300);
+                }
+            }, 
+            error : function(error) {
+                console.log("There was an error updating the item.");
+                console.log(error);
+                $("#addItemStatus").html("There was an error updating the item.").fadeToggle(300).delay(3000).fadeToggle(300);
+            }
+        });
+        e.preventDefault();
+        return false;
+    });
+    $("#addEmbed").click(function(e) {
+        jQuery.ajax({
+            url : '/admin/items/addEmbed',
+            type : 'POST',
+            data : $("#addOptionForm").serialize(), 
+            dataType : 'json',
+            
+            success : function(response) {
+                if (response.status == "OK") {
+                    $("#addEmbedStatus").html("Embedded item added successfully!").fadeToggle(300).delay(3000).fadeToggle(300);
+                    //clear the form
+                    $("input[name='embedName'],input[name='embedCalories'],input[name='embedCost'],input[name='embedDesc']").val('');
+                    $("input").css('background','white');
+                }
+                else {
+                    $("#addItemStatus").html("There was an error updating the item.").fadeToggle(300).delay(3000).fadeToggle(300);
+                }
+            }, 
+            error : function(error) {
+                console.log("There was an error");
+                console.log(error);
+                $("#addEmbedStatus").html("There was an error updating the item.").fadeToggle(300).delay(3000).fadeToggle(300);
+            }
+            
+        });
+        e.preventDefault();
+        return false;
+    });
+
+    $('.itemEdit').on('click', function(e) {
+        var idToEdit = $(this).attr('title');
+        $('#itemContents' + idToEdit).toggle();
+    });
+    $('.itemDelete').live('click', function(e) {
+        var idToDelete = $(this).attr('title');
+        var formData = {
+            itemID : idToDelete
+        }
+        $.ajax({
+            url: "/admin/items/delete",
+            type: "POST",
+            data: formData,
+            dataType: "json",
+            success: function(response) {
+                if (response.status === "OK") {
+                    $("#bullet" + idToDelete).html(response.msg);
+                }
+                else {
+                    console.log("There was a partial error deleting the item.");
+                }
+            }, 
+            error : function(error) {
+                console.log("There was an error updating the item.");
+                console.log(error);
+            }
+        });
+        e.preventDefault();
+        return false;
+    });
+    
+    $('#updateItem').click(function(e) {
+        formData = $('#itemForm').serialize();
+        $.ajax({
+            url: "/admin/items/update",
+            type: "POST",
+            data: formData,
+            dataType: "json",
+            success: function(response) {
+                if (response.status === "OK") {
+                    $("#updated").fadeToggle(300).html("Item updated!").fadeToggle(300);
+                }
+                else {
+                    $("#updated").fadeToggle(300).html("There was an error updating the item.").fadeToggle(300);
+                }
+            }, 
+            error : function(error) {
+                console.log("There was an error updating the item.");
+                console.log(error);
+                $("#updated").fadeToggle(300).html("There was an error updating the item.").fadeToggle(300);
+            }
+        });
+        e.preventDefault();
+        return false;
+    });
+});
+
+</SCRIPT>

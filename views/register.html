@@ -1,0 +1,57 @@
+<form id="registerForm" method="POST" action="/register">
+
+<CENTER><TABLE WIDTH="100%" HEIGHT="100%" CLASS="login" BORDER=0><TR><TD VALIGN="top" ALIGN="center">
+<BR />
+<SPAN CLASS="header">Register a New Admin User</SPAN><BR />
+<SPAN><SPAN ID="statusMsg" STYLE="display: none;" CLASS="infoMsg"></SPAN> &nbsp;</SPAN>
+
+<TABLE CELLPADDING=10>
+<TR><TD ALIGN="right" WIDTH="35%"><label for="firstname">first name</label></TD>
+<TD><input type="text" name="firstname" id="firstname" class="login"></TD>
+<TR><TD ALIGN="right"><label for="lastname">last name</label></TD>
+<TD><input type="text" name="lastname" id="lastname" class="login"></TD></TR>
+<TR><TD ALIGN="right"><label for="email">email</label></TD>
+<TD><input type="text" name="email" id="email" placeholder=" email@email.com" class="login"></TD></TR>
+<TR><TD ALIGN="right"><label for="password">password</label></TD>
+<TD><input type="password" name="password" id="password" class="login" placeholder=" (at least 8 chars)"></TD></TR>
+
+<TR><TD COLSPAN=2 ALIGN="center"><BR /><BUTTON ID="register" type="submit" CLASS="login">register</BUTTON></TD></TR>
+</TABLE>
+    
+</form>
+</TABLE></CENTER>
+
+<SCRIPT TYPE="text/javascript">
+var user = {
+  validateCredentials: function (firstname, lastname, username, password) {
+    return (
+          (!(username += '') || username === '') ? { error: "No email given.", field: 'email' }
+        : (!(username += '') || password === '') ? { error: "No password given.", field: 'pass' }
+        : (username.length < 3)                  ? { error: "Email is less than 3 characters.", field: 'email' }
+        : (username.indexOf("@") === -1)         ? { error: "Email not in proper e-mail format.", field: 'email' }
+        : (firstname.length < 1)                 ? { error: "First name is not long enough.", field: 'firstname' }
+        : (lastname.length < 1)                  ? { error: "Last name is not long enough.", field: 'lastname' }
+        : (password.length < 4)                  ? { error: "Password is less than 4 Characters.", field: 'pass' }
+        : (!/^([a-z0-9-_]+)$/i.test(username))   ? { error: "Email contains invalid characters.", field: 'email' }
+        : false
+    );
+  }
+};
+$(function() {
+	$("#register").click(function(e) {
+  	$("input").css('background', 'white');
+    var results = user.validateCredentials($('#firstname').val(), $('#lastname').val(), $('#email').val(), $('#password').val());
+    if (results === true) {
+      $('#registerForm').submit();
+    }
+    else {
+      $("#statusMsg").html(results.error).fadeToggle(300).delay(3000).fadeToggle(300);
+      $("#" + results.field).focus();
+      $("#" + results.field).css('background', 'red');
+    }
+    e.preventDefault();
+    return false;
+	});
+});
+
+</SCRIPT>

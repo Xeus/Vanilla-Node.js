@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<HTML>
+<HEAD>
+<TITLE><% if (typeof pageTitle != "undefined") { %><%= pageTitle %><% } else { %>Vanilla Node<% } %></TITLE>
+<LINK HREF='http://fonts.googleapis.com/css?family=Patua+One' rel='stylesheet' type='text/css'>
+<LINK HREF='/css/main.css' REL='stylesheet' TYPE='text/css'>
+<SCRIPT TYPE="text/javascript" SRC="http://documentcloud.github.com/underscore/underscore-min.js"></SCRIPT>
+<SCRIPT TYPE="text/javascript" SRC="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></SCRIPT>
+<SCRIPT TYPE="text/javascript" SRC="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></SCRIPT>
+</HEAD>
+
+<BODY>
+<DIV ID="header"></DIV>
+<DIV ID="bodyContainer"><%- body %></DIV>
+<DIV ID="footer"></DIV>
+</BODY>
+</HTML>

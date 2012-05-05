@@ -1,0 +1,19 @@
+{
+  "name": "vanillanode",
+  "version": "0.0.1",
+  "dependencies": {
+        "express": "2.x"
+      , "mongoose" : ""
+      , "request" : ""
+      , "ejs" : ""
+      , "emailjs" : ""
+      , "moment" : ""
+      , "underscore" : ""
+      , "mongodb" : ""
+      , "connect-mongodb": ""
+      , "bcrypt" : ""
+      , "passport" : ""
+      , "passport-local" : ""
+      , "socket.io" : ""
+  }
+}
