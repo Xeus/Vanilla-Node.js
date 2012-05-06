@@ -8,7 +8,7 @@ module.exports = {
     jsonItems: function(request, response){
 
         // define the fields you want to include in your json data
-        includeFields = ['_id','itemName','itemDesc','itemType','itemCost','itemCalories','itemAdded'];
+        includeFields = ['_id','itemName','itemDesc','itemType','itemCost','itemCalories','itemAdded', 'embeds'];
 
         // query for all blog
         queryConditions = {}; //empty conditions - return everything

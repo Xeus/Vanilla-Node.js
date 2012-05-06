@@ -1,10 +1,10 @@
 <H4 CLASS="header formTable">item list (see <A HREF="/items/json">JSON</A>)</H4>
 <% if (items.length != 0) { %>
 <UL>
-<!-- need to refresh this upon AJAX refresh -->
+<!-- TODO: need to display contents when modifyItem opened -->
 <% for (var i=0; i<items.length; i++) { %>
-<LI ID="bullet<%= items[i]._id %>"><DIV CLASS="showMenu" ID="<%= items[i]._id %>"><%= items[i].itemName %> <SPAN CLASS="itemEdit">[ <A HREF="#" CLASS="itemEdit">edit</A> | <A HREF="#" CLASS="itemDelete" TITLE="<%= items[i]._id %>">delete</A> ]</SPAN> 
-<DIV ID="itemContents<%= i %>" STYLE="display: none;">item info</DIV><DIV ID="embedContents<%= i %>" STYLE="display: none;"></DIV>
+<LI ID="bullet<%= items[i]._id %>"><DIV CLASS="showMenu" ID="<%= items[i]._id %>"><%= items[i].itemName %> <SPAN CLASS="modifyItem">[ <A HREF="#" CLASS="editItem" TITLE="<%= items[i]._id %>">edit</A> | <A HREF="#" CLASS="deleteItem" TITLE="<%= items[i]._id %>">delete</A> ]</SPAN> 
+<DIV ID="itemContents<%= items[i]._id %>" STYLE="display: none;">item info</DIV><DIV ID="embedContents<%= i %>" STYLE="display: none;"></DIV>
 </DIV></LI>
 <% } %>
 </UL>

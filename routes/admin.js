@@ -45,9 +45,9 @@ module.exports = {
         });
     },
 
-    // will refresh list of items
+    // will refresh list of items in alphabetical order
     displayList: function(request, response) {
-        db.Items.find({}, function (err, items) {
+        db.Items.find({}, {}, { sort: { itemName : 'ascending' } }, function (err, items) {
 
             if (err) {
                 //an error occurred
@@ -215,7 +215,7 @@ module.exports = {
 
     addEmbed: function(request, response) {
 
-        db.Items.findOne({_id : request.body.embedList}, function(err, menuItem){
+        db.Items.findOne({_id : request.body.embedList}, function(err, items){
             // Prepare the blog post entry form into a data object
             var embedCost = request.body.embedCost;
             if (embedCost == null || embedCost == "undefined" || embedCost == "") {
@@ -231,12 +231,13 @@ module.exports = {
             var embedItem = new db.Embeds(embedData);
 
             // save the item
-            item.embeds.push(embedItem);
-            item.save();
+            items.embeds.push(embedItem);
+            items.save();
             
             if (request.xhr) {
                 response.json({
-                    status : 'OK'
+                    status : 'OK',
+                    msg : "New embed added!"
                 });
             }
         });

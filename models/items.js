@@ -7,7 +7,7 @@ module.exports.configureSchema = function(Schema, mongoose) {
 		itemCalories : Number,
 		itemType : String,
 		itemAdded : { type : Date, default : Date.now },
-		itemOptions : [Embeds]
+		embeds : [Embeds]
 	});
 
 	var Embeds = new Schema({ 

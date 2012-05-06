@@ -1,6 +1,10 @@
 # Vanilla Node.js Express Server
 
-Ben Turner ([@Xeus](http://twitter.com/Xeus))
+by Ben Turner ([@Xeus](http://twitter.com/Xeus))
+
+## Metadata
+
+Last update 05 May 12: Partially done with CRUD operations, tons to fix though.
 
 ## Description
 
@@ -63,18 +67,18 @@ Finally, type `foreman start` to start up the node.js express server.  You could
 
 - [Github](https://github.com/Xeus/Vanilla-Node.js)
 
-## Metadata
+## TODO:
 
-Last update 05 May 12: Partially done with CRUD operations, tons to fix though.
-
-Search for "TODO:" throughout the code to find things requiring more work/fixes.
-- Add Embedded Item: incomplete
+Search for "TODO:" throughout the code to find things requiring more work/fixes:
 - Remove Embedded Item: incomplete
 - Update Item: incomplete
 - Update Embedded Item: incomplete
 - Admin Stats: incomplete
+- Display Item Contents: incomplete
+- Display Embed Contents: incomplete
 - JSON: complete
 - Add Item: complete
+- Add Embedded Item: complete
 - Remove Item: complete
 - User auth: complete
 - Login form validation: complete
