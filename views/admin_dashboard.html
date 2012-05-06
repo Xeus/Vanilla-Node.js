@@ -63,6 +63,7 @@
 
 <script type="text/javascript">
 
+// is this a legit number or dollar/decimal amount?
 var validateNum = function(field) {
     var numericExpression = /^[ ,.,0-9]+$/;
     if(field.val().match(numericExpression) || (field.val() == "")){
@@ -107,6 +108,7 @@ $(function() {
                     $("#addItemStatus").html(response.msg).fadeToggle(300).delay(3000).fadeToggle(300);
                     $("input[name='itemName'],input[name='itemCalories'],input[name='itemCost'],input[name='itemDesc']").val('');
                     $("input").css('background','white');
+                    $("#embedMenuList").load('/admin/belongs'); // updates embed "belongs to" list to reflect changes
                 }
                 else {
                     $("#addItemStatus").html("There was an error updating the item.").fadeToggle(300).delay(3000).fadeToggle(300);
@@ -121,6 +123,7 @@ $(function() {
         e.preventDefault();
         return false;
     });
+    // TODO: embed code for embedded docs not working yet but will look similar to code for adding items
     $("#addEmbed").click(function(e) {
         jQuery.ajax({
             url : '/admin/items/addEmbed',
@@ -150,6 +153,7 @@ $(function() {
         return false;
     });
 
+    // TODO: editing code does not really exist yet, should open div when "edit" is clicked so you can then edit the item and submit it
     $('.itemEdit').on('click', function(e) {
         var idToEdit = $(this).attr('title');
         $('#itemContents' + idToEdit).toggle();
@@ -167,6 +171,7 @@ $(function() {
             success: function(response) {
                 if (response.status === "OK") {
                     $("#bullet" + idToDelete).html(response.msg);
+                    $("#embedMenuList").load('/admin/belongs'); // updates embed "belongs to" list to reflect changes
                 }
                 else {
                     console.log("There was a partial error deleting the item.");
@@ -181,6 +186,7 @@ $(function() {
         return false;
     });
     
+    // TODO: update code not functioning yet, should send form via AJAX and update record in db
     $('#updateItem').click(function(e) {
         formData = $('#itemForm').serialize();
         $.ajax({

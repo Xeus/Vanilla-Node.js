@@ -35,6 +35,7 @@ module.exports = function(app) {
     app.post('/admin/items/delete', adminRoute.deleteItem);
     app.get('/admin/reset', adminRoute.reset);
     app.get('/admin/list', adminRoute.displayList);
+    app.get('/admin/belongs', adminRoute.belongs);
 
 
     // ROUTES: json.js

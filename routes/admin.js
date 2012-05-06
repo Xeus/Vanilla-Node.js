@@ -64,7 +64,7 @@ module.exports = {
 
     // edit one flow via ajax
     editItem: function(request, response) {
-        db.Flow.findOne({ flowID: request.params.flowID }, function (err, item) {
+        db.Items.findOne({ itemID: request.params.itemID }, function (err, items) {
 
             if (err) {
                 //an error occurred
@@ -79,6 +79,30 @@ module.exports = {
                 }
                 else {
                     request.flash('updated', 'Item updated!');
+                }
+            }
+        });
+    },
+
+    // edit one flow via ajax
+    belongs: function(request, response) {
+        db.Items.find({}, function (err, items) {
+
+            if (err) {
+                //an error occurred
+                console.log("something went wrong");
+                console.log(err);
+            }
+            else {
+                if (request.xhr) {
+                    var templateData = {
+                        layout : false,
+                        items : items
+                    };
+                    response.partial('belongs.html', templateData);
+                }
+                else {
+                    response.render('/admin');
                 }
             }
         });

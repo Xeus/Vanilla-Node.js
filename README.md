@@ -6,6 +6,10 @@ Ben Turner ([@Xeus](http://twitter.com/Xeus))
 
 Barebones Express server code with admin CRUD functions, common libs in place in the package.json as well as in the HTML HEAD.
 
+Front-end uses [jQuery](http://jquery.com/) 1.7.1, [jQuery UI](http://jqueryui.com/) 1.8.18, and [Underscore.js](http://documentcloud.github.com/underscore/) (latest version) hosted on Google and Github.  [Keymaster.js](https://github.com/madrobby/keymaster) (from 05 May 12) also sourced in front-end.
+
+An example [Google Web Fonts](http://www.google.com/webfonts) source is linked.
+
 ## Modules Used
 
     { "name": "vanillanode",
@@ -28,7 +32,7 @@ Barebones Express server code with admin CRUD functions, common libs in place in
 
 ## Credits
 
-- [French Vanilla pallette](http://www.colourlovers.com/palette/45488/french_vanilla) by [despise](http://www.colourlovers.com/lover/despise) from [colourlovers](colourlovers.com)
+- [French Vanilla palette](http://www.colourlovers.com/palette/45488/french_vanilla) by [despise](http://www.colourlovers.com/lover/despise) from [colourlovers](colourlovers.com)
 - John Schimmel's [Dynamic Web Dev code](http://github.com/johnschimmel/)
 
 ## Installation
@@ -60,4 +64,15 @@ Finally, type `foreman start` to start up the node.js express server.  You could
 
 Last update 05 May 12: Partially done with CRUD operations, tons to fix though.
 
-Search for "TODO:" to find things requiring more work/fixes.
+Search for "TODO:" throughout the code to find things requiring more work/fixes.
+- Add Embedded Item: incomplete
+- Remove Embedded Item: incomplete
+- Update Item: incomplete
+- Update Embedded Item: incomplete
+- Admin Stats: incomplete
+- JSON: complete
+- Add Item: complete
+- Remove Item: complete
+- User auth: complete
+- Login form validation: complete
+- Register form validation: complete
