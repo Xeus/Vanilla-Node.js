@@ -2,6 +2,7 @@
 HTML, BODY, INPUT, BUTTON, SELECT, OPTION { font-family: 'Patua One', cursive; }
 HTML, BODY { background: #5F3711; color: white; padding: 0px; margin: 0px; }
 H1, H2, H3, H4 { color: #F3E5AB; }
+INPUT[type=submit], BUTTON[type=submit] { background: #D4C098; }
 P { font-size: 20pt; text-align: justify;}
 #header, #footer { background: #026873; color: #F2F0CE; }
 .menuSide { margin: 0px auto; width: 100%; }

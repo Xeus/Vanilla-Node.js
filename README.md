@@ -8,6 +8,8 @@ Barebones Express server code with admin CRUD functions, common libs in place in
 
 Front-end uses [jQuery](http://jquery.com/) 1.7.1, [jQuery UI](http://jqueryui.com/) 1.8.18, and [Underscore.js](http://documentcloud.github.com/underscore/) (latest version) hosted on Google and Github.  [Keymaster.js](https://github.com/madrobby/keymaster) (from 05 May 12) also sourced in front-end.
 
+If you want to change the jQuery UI theme, use Xavi Ramirez's links to [jQuery UI themes hosted on Google's CDN](http://the-xavi.com/articles/jquery-ui-css-themes-hosted-on-cdn).
+
 An example [Google Web Fonts](http://www.google.com/webfonts) source is linked.
 
 ## Modules Used
@@ -34,6 +36,7 @@ An example [Google Web Fonts](http://www.google.com/webfonts) source is linked.
 
 - [French Vanilla palette](http://www.colourlovers.com/palette/45488/french_vanilla) by [despise](http://www.colourlovers.com/lover/despise) from [colourlovers](colourlovers.com)
 - John Schimmel's [Dynamic Web Dev code](http://github.com/johnschimmel/)
+- Xavi Ramirez's links to [jQuery UI themes hosted on Google's CDN](http://the-xavi.com/articles/jquery-ui-css-themes-hosted-on-cdn)
 
 ## Installation
 
