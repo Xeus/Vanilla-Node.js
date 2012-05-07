@@ -29,7 +29,7 @@ var user = {
         : (username.length < 3)                  ? { error: "Email is less than 3 Characters.", field: 'email' }
         : (username.indexOf("@") === -1)                 ? { error: "Email not in proper e-mail format.", field: 'email' }
         : (password.length < 4)                  ? { error: "Password less than 4 characters.", field: 'pass' }
-        : (!/^([a-z0-9-_]+)$/i.test(username))   ? { error: "Email contains invalid characters.", field: 'email' }
+        : (!/^([a-z0-9-_.]+)$/i.test(username))   ? { error: "Email contains invalid characters.", field: 'email' }
         : false
     );
   }

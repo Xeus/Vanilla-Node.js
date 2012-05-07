@@ -1,3 +1,6 @@
+// TODO: learn how to use response.send, response.flash
+// TODO: just use json feed?
+// TODO: instead of partials, use JS templating?
 
 /* Module dependencies. */
 var db = require('../accessDB');
@@ -28,23 +31,6 @@ module.exports = {
         });
     },
 
-    // lets you view and edit all flows at once
-    editAllItems: function(request, response) {
-        db.Items.find({}, function (err, items) {
-
-            if (err) {
-                //an error occurred
-                console.log("something went wrong");
-            }
-            else {
-                templateData = {
-                    items : items
-                };
-                response.render('admin_dashboard.html', templateData);
-            }
-        });
-    },
-
     // will refresh list of items in alphabetical order
     displayList: function(request, response) {
         db.Items.find({}, {}, { sort: { itemName : 'ascending' } }, function (err, items) {
@@ -60,128 +46,6 @@ module.exports = {
                 response.render('item_list.html', templateData);
             }
         });
-    },
-
-    // edit one flow via ajax
-    editItem: function(request, response) {
-        db.Items.findOne({ itemID: request.params.itemID }, function (err, items) {
-
-            if (err) {
-                //an error occurred
-                console.log("something went wrong");
-                console.log(err);
-            }
-            else {
-                if (request.xhr) {
-                    response.json({
-                        status :'OK'
-                    });
-                }
-                else {
-                    request.flash('updated', 'Item updated!');
-                }
-            }
-        });
-    },
-
-    // edit one flow via ajax
-    belongs: function(request, response) {
-        db.Items.find({}, function (err, items) {
-
-            if (err) {
-                //an error occurred
-                console.log("something went wrong");
-                console.log(err);
-            }
-            else {
-                if (request.xhr) {
-                    var templateData = {
-                        layout : false,
-                        items : items
-                    };
-                    response.partial('belongs.html', templateData);
-                }
-                else {
-                    response.render('/admin');
-                }
-            }
-        });
-    },
-
-    // updates one flow via ajax
-    updateItem: function(request, response) {
-        var requestedItem = request.body.data.itemID;
-
-        // find the requested document
-        db.Item.findOne({ itemID: requestedItem }, function(err, item) {
-            if (err) {
-                //an error occurred
-                console.log("Something went wrong!");
-                console.log(err);
-            }
-            else if (item === null ) {
-                console.log('Item not found.');
-                response.send("Uh oh, can't find that item.");
-            }
-            else {
-                var newData = request.body.data;
-                item.itemName = newData.itemName;
-                item.itemDesc = newData.itemDesc;
-                item.itemCost = newData.itemCost;
-                item.itemCalories = newData.itemCalories;
-                item.save();
-                if (request.xhr) {
-                    response.json({
-                        status : 'OK',
-                        msg : 'Item updated!'
-                    });
-                }
-                else {
-                    request.flash('updated', 'Item updated!');
-                }
-            }
-        });
-
-    },
-
-    updateEmbed: function(request, response){
-        var menuID = request.body.menuID;
-        var optionID = request.body.optionID;
-
-        /*db.Menu.findById(menuID, function(err, menuItem){
-                
-                // grab the specific embed doc you want by its id.
-                // you can access all properties of the embed doc with '.' dot notation
-                menuItem.menuOptions.id(optionID).optionName = request.body.optionName;
-                menuItem.menuOptions.id(optionID).optionDesc = request.body.optionDesc;
-                menuItem.menuOptions.id(optionID).optionCost = request.body.optionCost;
-
-                // save the main document - which saves the updated embed doc
-                menuItem.save();
-        }); */
-
-        db.Menu.findById(menuID, function(err, menuItem) {
-            if (err) { console.log(err); }
-            for (var i=0;i<menuItem.menuOptions.length;i++) {
-                if (menuItem.menuOptions[i].optionName == request.body.optionNameOld) {
-                    var newCost = parseFloat(request.body.optionCost);
-                    menuItem.menuOptions[i].optionName = request.body.optionName;
-                    menuItem.menuOptions[i].optionDesc = request.body.optionDesc;
-                    menuItem.menuOptions[i].optionCost = newCost;
-                    console.log(menuItem);
-                }
-            }
-            menuItem.markModified("menuOptions");
-            menuItem.save(function(err) {
-                if (err) { console.log(err); }
-                else if (request.xhr) { // if request sent via AJAX
-                    console.log("Update succeeded.");
-                    response.json({ status : "OK" });
-                }
-            });
-
-        });
-
     },
 
     addItem: function(request, response) {
@@ -266,6 +130,146 @@ module.exports = {
             }
         
         });
+    },
+
+    deleteEmbed: function(request, response) {
+        console.log(response);
+        db.Embeds.findOne({ _id : request.body.embedID }, function (err, delEmbed) {
+            console.log("fired");
+            if (err) {
+                //an error occurred
+                console.log("Failed to remove embed.");
+            }
+            else {
+                db.Embeds.remove({ "_id" : delEmbed._id }, function (err, success) {
+                    if (err) {
+                        response.json({
+                            status : 'FAIL',
+                            msg : 'There was an error deleting the embed.'
+                        });
+                    }
+                    else {
+                        response.json({
+                            status : 'OK',
+                            msg : 'Embed deleted.'
+                        });
+                    }
+                });
+            }
+        
+        });
+    },
+
+    // edit one flow via ajax
+    editItem: function(request, response) {
+        db.Items.findOne({ itemID: request.params.itemID }, function (err, items) {
+
+            if (err) {
+                //an error occurred
+                console.log("something went wrong");
+                console.log(err);
+            }
+            else {
+                if (request.xhr) {
+                    response.json({
+                        status :'OK'
+                    });
+                }
+                else {
+                    request.flash('updated', 'Item updated!');
+                }
+            }
+        });
+    },
+
+    // edit one flow via ajax
+    belongs: function(request, response) {
+        db.Items.find({}, function (err, items) {
+
+            if (err) {
+                //an error occurred
+                console.log("something went wrong");
+                console.log(err);
+            }
+            else {
+                if (request.xhr) {
+                    var templateData = {
+                        layout : false,
+                        items : items
+                    };
+                    response.partial('belongs.html', templateData);
+                }
+                else {
+                    response.render('/admin');
+                }
+            }
+        });
+    },
+
+    // updates one flow via ajax
+    updateItem: function(request, response) {
+        var requestedItem = request.body.data.itemID;
+
+        // find the requested document
+        db.Item.findOne({ itemID: requestedItem }, function(err, item) {
+            if (err) {
+                //an error occurred
+                console.log("Something went wrong!");
+                console.log(err);
+            }
+            else if (item === null ) {
+                console.log('Item not found.');
+                response.send("Uh oh, can't find that item.");
+            }
+            else {
+                var newData = request.body.data;
+                item.itemName = newData.itemName;
+                item.itemDesc = newData.itemDesc;
+                item.itemCost = newData.itemCost;
+                item.itemCalories = newData.itemCalories;
+                item.save(function(err) {
+                    if (err) { console.log(err); }
+                    else if (request.xhr) {
+                        response.json({
+                            status : 'OK',
+                            msg : 'Item updated!'
+                        });
+                    }
+                });
+            }
+        });
+
+    },
+
+    updateEmbed: function(request, response){
+        var itemID = request.body.itemID;
+        var embedID = request.body.embedID;
+
+        db.Items.findById(itemID, function(err, items) {
+            if (err) { console.log(err); }
+            else {
+                for (var i=0;i<items.embeds.length;i++) {
+                    if (items.embeds[i].embedName == request.body.embedOld) {
+                        var newCost = parseFloat(request.body.optionCost);
+                        items.embeds[i].embedName = request.body.embedName;
+                        items.embeds[i].embedDesc = request.body.embedDesc;
+                        items.embeds[i].embedCost = newCost;
+                    }
+                }
+                items.markModified("embeds");
+                items.save(function(err) {
+                    if (err) { console.log(err); }
+                    else if (request.xhr) { // if request sent via AJAX
+                        console.log("Update succeeded.");
+                        response.json({
+                            status : "OK",
+                            msg : "Embed updated!"
+                        });
+                    }
+                });
+            }
+        });
+
     },
 
     reset : function(request, response) {

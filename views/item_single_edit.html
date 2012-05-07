@@ -1,0 +1,32 @@
+<TABLE><TR><TD VALIGN="top">
+
+<CENTER>
+
+<FORM NAME="singleItemForm" ID="singleItemForm" METHOD="post" ACTION="/admin/items/update">
+<INPUT TYPE="hidden" NAME="itemID" VALUE="<%= item._id %>" />
+<TABLE BORDER=0 CLASS="itemSingle">
+<TR>
+<TD ALIGN="right">type of item</TD>
+<TD><SELECT NAME="itemTypeList" ID="itemTypeList">
+<% for (var i=0; i<itemTypeList.length; i++) { %>
+<OPTION VALUE="<%= itemTypeList[i] %>" <% if (itemTypeList[i] == items.itemType) { %>SELECTED<% } %>><%= itemTypeList[i] %></OPTION>
+<% } %>
+</SELECT></TD>
+</TR>
+<TR><TD ALIGN="right" VALIGN="middle">item name</TD>
+<TD><INPUT NAME="itemName" ID="singleItemName" CLASS="ui-widget-content ui-corner-all" VALUE="<%= items.itemName %>"></TD></TR>
+<TR><TD ALIGN="right" VALIGN="middle">item desc</TD>
+<TD><TEXTAREA NAME="itemDesc" ID="singleItemDesc" CLASS="ui-widget-content ui-corner-all" ROWS=3 COLS=40><%= items.itemDesc %></TEXTAREA></TD></TR>
+<TR><TD ALIGN="right" VALIGN="middle">cost</TD>
+<TD><INPUT TYPE="text" NAME="itemCost" ID="singleItemCost" VALUE="<%= items.itemCost.toFixed(2) %>" CLASS="ui-widget-content ui-corner-all" PLACEHOLDER=" no $, just x.xx" onBlur="validateNum($('#itemCost'));" /></TD></TR>
+<TR><TD ALIGN="right" VALIGN="middle">calories</TD>
+<TD><INPUT TYPE="text" NAME="itemCalories" ID="singleItemCalories" VALUE="<%= items.itemCalories %>" CLASS="ui-widget-content ui-corner-all" onBlur="validateNum($('#itemCalories'));" /></TD></TR>
+<TR><TD></TD><TD><BR /><INPUT NAME="updateItem" TYPE="submit" ID="updateItem" VALUE="update the item!" CLASS="ui-widget-content ui-corner-all" /></TD></TR></FORM>
+</TABLE>
+
+<!-- DIV confirms successful AJAX post msg -->
+<DIV ID="updated" CLASS="infoMsg ui-widget-content ui-corner-all" STYLE="display: none;"></DIV>
+
+</CENTER>
+
+</TD></TR></TABLE>

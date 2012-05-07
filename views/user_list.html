@@ -1,0 +1,24 @@
+<% for (var i=0; i<users.length; i++) { %>
+<TABLE BORDER=0>
+<TR>
+<TH>user page</TH>
+<TH>last name</TH>
+<TH>first name</TH>
+<TH>email</TH>
+<TH>date joined</TH>
+<TH>reset password</TH>
+<TH>lock/unlock account</TH>
+<TH>delete</TH>
+</TR>
+<TR>
+<TD CLASS="userPage"><BUTTON>user page<BUTTON></TD>
+<TD ALIGN="right" CLASS="userName"><%= users[i].name.last %></TD>
+<TD ALIGN="left" CLASS="userName"><%= users[i].name.first %></TD>
+<TD CLASS="userEmail"><%= users[i].email %></TD>
+<TD CLASS="userJoined"></TD>
+<TD CLASS="userPassword"><BUTTON>reset</BUTTON></TD>
+<TD CLASS="userSuspend"><BUTTON>suspended</BUTTON></TD>
+<TD CLASS="userDelete"><BUTTON>delete</BUTTON></TD>
+</TR>
+</TABLE>
+<% } %>

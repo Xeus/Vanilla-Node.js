@@ -12,6 +12,14 @@ Barebones Express server code with admin CRUD functions, common libs in place in
 
 Front-end uses [jQuery](http://jquery.com/) 1.7.1, [jQuery UI](http://jqueryui.com/) 1.8.18, and [Underscore.js](http://documentcloud.github.com/underscore/) (latest version) hosted on Google and Github.  [Keymaster.js](https://github.com/madrobby/keymaster) (from 05 May 12) also sourced in front-end.
 
+Back-end uses Express, socket.io, and ejs.  I'm not very good with CoffeeScript, jade, or Backbone.js yet so I didn't support those. :/
+
+This supports MongoDB but could be switched somewhat easily to another DB format.
+
+Passport only has the email formula enabled right now but I'll have to play with other logins (FB, Twitter, etc.).
+
+I'm using emailjs for sending email through node.js, and momentjs to handle date/time formatting.
+
 If you want to change the jQuery UI theme, use Xavi Ramirez's links to [jQuery UI themes hosted on Google's CDN](http://the-xavi.com/articles/jquery-ui-css-themes-hosted-on-cdn).
 
 An example [Google Web Fonts](http://www.google.com/webfonts) source is linked.
@@ -73,9 +81,13 @@ Search for "TODO:" throughout the code to find things requiring more work/fixes:
 - Remove Embedded Item: incomplete
 - Update Item: incomplete
 - Update Embedded Item: incomplete
+- CRUD Partials: incomplete
 - Admin Stats: incomplete
+- Admin User Control Functions: incomplete
 - Display Item Contents: incomplete
 - Display Embed Contents: incomplete
+- socket.io Basic Funcs: incomplete
+- User Dashboard: incomplete
 - JSON: complete
 - Add Item: complete
 - Add Embedded Item: complete
@@ -83,3 +95,5 @@ Search for "TODO:" throughout the code to find things requiring more work/fixes:
 - User auth: complete
 - Login form validation: complete
 - Register form validation: complete
+- Add item validation: complete
+- Add embed validation: complete

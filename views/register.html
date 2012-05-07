@@ -32,7 +32,7 @@ var user = {
         : (firstname.length < 1)                 ? { error: "First name is not long enough.", field: 'firstname' }
         : (lastname.length < 1)                  ? { error: "Last name is not long enough.", field: 'lastname' }
         : (password.length < 4)                  ? { error: "Password is less than 4 Characters.", field: 'pass' }
-        : (!/^([a-z0-9-_]+)$/i.test(username))   ? { error: "Email contains invalid characters.", field: 'email' }
+        : (!/^([a-z0-9-_.]+)$/i.test(username))   ? { error: "Email contains invalid characters.", field: 'email' }
         : false
     );
   }

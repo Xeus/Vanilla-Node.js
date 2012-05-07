@@ -73,27 +73,33 @@ module.exports = {
 
         // will show admin nav edit links if logged in
         if (request.user) { var loggedIn = true; } else { var loggedIn = false; }
-        templateData = {
+        var templateData = {
             currentUser : request.user,
             message : request.flash('message')[0], // get message is received from prior form submission like password change
             loggedIn : loggedIn,
             admin : false
         }
     
-        response.render('account.html', templateData );
+        response.render('account.html', templateData);
     },
 
     getUsers : function(request, response) {
         
         // query for all users only retrieve email and name
-        db.User.find({},['email','name.first','name.last'], function(err,users) {
+        // TODO: sort
+        db.User.find({},['email','name.first','name.last'], function(err, users) {
             
             if (err) {
                 console.log(err);
                 response.send("an error occurred");
             }
-            
-            response.json(users);
+            else {
+                var templateData {
+                    pageTitle : "All Users",
+                    users : users
+                }
+                response.render('user_list.html', templateData);
+            }
             
         })
         

@@ -25,7 +25,6 @@ module.exports = function(app) {
     // ROUTES: admin.js
     app.get("/admin", adminRoute.admin);
     // CRUD
-    app.get("/admin/items/edit", adminRoute.editAllItems);
     app.get("/admin/items/:itemID", adminRoute.showItem);
     app.get("/admin/items/:itemID/edit", adminRoute.editItem);
     app.post('/admin/items/add', adminRoute.addItem);
@@ -33,10 +32,11 @@ module.exports = function(app) {
     app.post("/admin/items/update", adminRoute.updateItem);
     app.post("/admin/items/updateEmbed", adminRoute.updateEmbed);
     app.post('/admin/items/delete', adminRoute.deleteItem);
+    app.post('/admin/items/deleteEmbed', adminRoute.deleteItem);
     app.get('/admin/reset', adminRoute.reset);
     app.get('/admin/list', adminRoute.displayList);
     app.get('/admin/belongs', adminRoute.belongs);
-
+    app.get('/admin/users', userRoute.getUsers);
 
     // ROUTES: json.js
     app.get('/items/json', jsonRoute.jsonItems);
@@ -64,6 +64,5 @@ module.exports = function(app) {
     app.get('/account', ensureAuthenticated, userRoute.getAccount); // Display account page
     app.post('/account/changepassword', ensureAuthenticated, userRoute.postChangePassword),
     app.get('/logout', userRoute.logout); // Logout user
-    app.get('/getusers', userRoute.getUsers);
     
 }
