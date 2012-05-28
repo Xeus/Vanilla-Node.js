@@ -2,10 +2,6 @@
 
 by Ben Turner ([@Xeus](http://twitter.com/Xeus))
 
-## Metadata
-
-Last update 05 May 12: Partially done with CRUD operations, tons to fix though.
-
 ## Description
 
 Barebones Express server code with admin CRUD functions, common libs in place in the package.json as well as in the HTML HEAD.
@@ -78,24 +74,24 @@ Finally, type `foreman start` to start up the node.js express server.  You could
 ## TODO:
 
 Search for "TODO:" throughout the code to find things requiring more work/fixes:
-- Unit Tests: incomplete
-- Admin Stats: incomplete
-- Admin User Control Functions: incomplete
-- socket.io Basic Funcs: incomplete
-- User Dashboard: incomplete
-- JSON: complete
+-Unit Tests: incomplete
+-Admin Stats: incomplete
+-Admin User Control Functions: incomplete
+-socket.io Basic Funcs: incomplete
+-User Dashboard: incomplete
+-JSON: complete
 
-- Add Item: complete
-- Add Embedded Item: complete
-- Edit Item: complete
-- Edit Embed: complete
-- Update Item: complete
-- Update Embedded Item: complete
-- Remove Item: complete
-- Remove Embedded Item: complete
-- User Auth: complete
-- Login form validation: complete
-- Register form validation: complete
-- Add item validation: complete
-- Add embed validation: complete
-- Hard-coded Google Web Fonts example: complete
+-Add Item: complete
+-Add Embedded Item: complete
+-Edit Item: complete
+-Edit Embed: complete
+-Update Item: complete
+-Update Embedded Item: complete
+-Remove Item: complete
+-Remove Embedded Item: complete
+-User Auth: complete
+-Login form validation: complete
+-Register form validation: complete
+-Add item validation: complete
+-Add embed validation: complete
+-Hard-coded Google Web Fonts example: complete
