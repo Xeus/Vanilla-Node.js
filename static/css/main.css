@@ -1,15 +1,29 @@
 /* http://www.colourlovers.com/palette/45488/french_vanilla */
-HTML, BODY, INPUT, BUTTON, SELECT, OPTION { font-family: 'Patua One', cursive; }
+
+/* example of how to do embedded font
+@font-face {
+	font-family: 'Nova Square';
+	font-style: cursive;
+	font-weight: normal;
+	src: local('Nova Square'), local('Nova Square'), url('css/NovaSquare.ttf') format('truetype');
+} */
+HTML, BODY, INPUT, BUTTON, SELECT, OPTION, TEXTAREA { font-family: 'Patua One', cursive; }
 HTML, BODY { background: #5F3711; color: white; padding: 0px; margin: 0px; }
 H1, H2, H3, H4 { color: #F3E5AB; }
-INPUT[type=submit], BUTTON[type=submit] { background: #D4C098; }
+INPUT[type=submit], BUTTON, BUTTON[type=submit], INPUT[type=button] { background: #D4C098; }
 P { font-size: 20pt; text-align: justify;}
-#header, #footer { background: #026873; color: #F2F0CE; }
+#header, #footer { background: black; color: #F3E5AB; padding: 5px; }
 .login, .login TD { font-size: 30pt; }
 .header { color: #F2F0CE; font-weight: bold;}
-.infoMsg { background: yellow !important; color: black; padding: 5px; }
-.formTable, .formTable TD, .formTable TD INPUT, .formTable TD SELECT, #bodyTable { font-size: 20pt;}
+.infoMsg { background: yellow !important; color: black; padding: 5px; font-size: 20pt; }
+.infoMsg.ui-widget-content { border-color: black;}
+INPUT, SELECT, BUTTON, #bodyTable, TEXTAREA { font-size: 20pt;}
 A { color: #F6F6E2; }
 A:visited { color: #E2D5C1; }
-A:hover { color: white; }
+BUTTON:hover, INPUT[type=submit]:hover, INPUT[type=button]:hover { color: black; background: white; }
+A:hover { color: white;}
 .modifyItem { font-size: 8pt; vertical-align: middle; }
+#headerTitle { font-size: 20pt; }
+#pageTable { padding-left: 20px; padding-right: 20px;}
+#singleItemStatus { position: fixed; bottom: 1em; left: 1em; }
+.updateEmbed TD, .updateEmbed BUTTON, .updateEmbed INPUT, .updateEmbed TEXTAREA { font-size: 12pt;}

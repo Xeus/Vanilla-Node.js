@@ -1,7 +1,7 @@
 module.exports.configureSchema = function(Schema, mongoose) {
 
 	var Items = new Schema({
-		itemName : { type : String, required : true },
+		itemName : { type : String, default : "Unnamed!" },
 		itemCost : Number,
 		itemDesc : String,
 		itemCalories : Number,
@@ -11,8 +11,8 @@ module.exports.configureSchema = function(Schema, mongoose) {
 	});
 
 	var Embeds = new Schema({ 
-		embedName : { type : String, required : true },
-		embedCost : type : Number,
+		embedName : { type : String, default : "Unnamed!" },
+		embedCost : Number,
 		embedDesc : String,
 		embedAdded : { type : Date, default : Date.now },
 		id : String

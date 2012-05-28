@@ -25,14 +25,15 @@ module.exports = function(app) {
     // ROUTES: admin.js
     app.get("/admin", adminRoute.admin);
     // CRUD
-    app.get("/admin/items/:itemID", adminRoute.showItem);
+    app.get("/admin/items/:itemID", adminRoute.showItem); // TODO: this
     app.get("/admin/items/:itemID/edit", adminRoute.editItem);
+    app.get("/admin/embeds/:itemID/edit", adminRoute.editEmbed);
     app.post('/admin/items/add', adminRoute.addItem);
     app.post('/admin/items/addEmbed', adminRoute.addEmbed);
     app.post("/admin/items/update", adminRoute.updateItem);
     app.post("/admin/items/updateEmbed", adminRoute.updateEmbed);
     app.post('/admin/items/delete', adminRoute.deleteItem);
-    app.post('/admin/items/deleteEmbed', adminRoute.deleteItem);
+    app.post('/admin/items/deleteEmbed', adminRoute.deleteEmbed);
     app.get('/admin/reset', adminRoute.reset);
     app.get('/admin/list', adminRoute.displayList);
     app.get('/admin/belongs', adminRoute.belongs);

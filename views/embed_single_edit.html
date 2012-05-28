@@ -1,28 +1,24 @@
-<% for (var i=0; i<items.embeds.length; i++) { %>
-
-<TABLE><TR><TD VALIGN="top">
-
+<% for (var z=0; z<items.embeds.length; z++) { %>
+<DIV ID="embed<%= items.embeds[z]._id %>">
+<BR /><TABLE CLASS="updateEmbed" ALIGN="right"><TR><TD VALIGN="top">
 <CENTER>
 
-<FORM NAME="embedForm<%= items.embeds[i]._id %>" ID="embedForm<%= items.embeds[i]._id %>" METHOD="post" ACTION="/admin/items/updateEmbed">
+<FORM NAME="embedForm<%= items.embeds[z]._id %>" ID="embedForm<%= items.embeds[z]._id %>" METHOD="post" ACTION="/admin/items/updateEmbed">
 <INPUT TYPE="hidden" NAME="itemID" VALUE="<%= items._id %>" />
-<INPUT TYPE="hidden" NAME="embedOld" VALUE="<%= items.embeds[i].embedName %>" />
-<INPUT TYPE="hidden" NAME="embedID" VALUE="<%= items.embeds[i]._id %>" />
+<INPUT TYPE="hidden" NAME="embedOld" VALUE="<%= items.embeds[z].embedName %>" />
+<INPUT TYPE="hidden" NAME="embedID" VALUE="<%= items.embeds[z]._id %>" />
 <TABLE BORDER=0 CLASS="embedSingle">
 <TR><TD ALIGN="right" VALIGN="middle">embed name</TD>
-<TD><INPUT NAME="embedName" ID="embedName<%= items.embeds[i]._id %>" CLASS="ui-widget-content ui-corner-all" VALUE="<%= items.embeds[i].embedName %>"></TD></TR>
+<TD><INPUT NAME="embedName" ID="embedName<%= items.embeds[z]._id %>" CLASS="ui-widget-content ui-corner-all" VALUE="<%= items.embeds[z].embedName %>" onBlur="validateName($('#embedName<%= items.embeds[z]._id %>'),'SingleItem');"></TD></TR>
 <TR><TD ALIGN="right" VALIGN="middle">embed desc</TD>
-<TD><TEXTAREA NAME="embedDesc" ID="embedDesc<%= items.embeds[i]._id %>" CLASS="ui-widget-content ui-corner-all" ROWS=3 COLS=40><%= items.embeds[i].itemDesc %></TEXTAREA></TD></TR>
+<TD><TEXTAREA NAME="embedDesc" ID="embedDesc<%= items.embeds[z]._id %>" CLASS="ui-widget-content ui-corner-all" ROWS=3 COLS=40><%= items.embeds[z].embedDesc %></TEXTAREA></TD></TR>
 <TR><TD ALIGN="right" VALIGN="middle">cost</TD>
-<TD><INPUT TYPE="text" NAME="embedCost" ID="embedCost<%= items.embeds[i]._id %>" VALUE="<%= items.embeds[i].embedCost.toFixed(2) %>" CLASS="ui-widget-content ui-corner-all" PLACEHOLDER=" no $, just x.xx" onBlur="validateNum($('#embedCost'));" /></TD></TR>
-<TR><TD></TD><TD><BR /><INPUT NAME="updateEmbed" TYPE="submit" ID="updateEmbed<%= items.embeds[i]._id %>" VALUE="update the embed!" CLASS="ui-widget-content ui-corner-all" /></TD></TR></FORM>
+<TD><INPUT TYPE="text" NAME="embedCost" ID="embedCost<%= items.embeds[z]._id %>" VALUE="<%= items.embeds[z].embedCost.toFixed(2) %>" CLASS="ui-widget-content ui-corner-all" PLACEHOLDER=" no $, just x.xx" onBlur="validateNum($('#embedCost<%= items.embeds[z]._id %>'));" /></TD></TR>
+<TR><TD></TD><TD><BR /><INPUT NAME="updateEmbedButton" TYPE="button" CLASS="updateEmbedButton ui-corner-all" VALUE="update the embed!" TITLE="<%= items.embeds[z]._id %>" /><BUTTON TYPE="button" CLASS="deleteEmbed ui-corner-all" TITLE="<%= items.embeds[z]._id %>">delete</BUTTON></TD></TR></FORM>
 </TABLE>
-
-<!-- DIV confirms successful AJAX post msg -->
-<DIV ID="updated<%= items.embeds[i]._id %>" CLASS="ui-widget-content ui-corner-all" STYLE="display: none;"></DIV>
 
 </CENTER>
 
-</TD></TR></TABLE>
-
+</TD></TR></TABLE><BR CLEAR="all" />
+</DIV>
 <% } %>

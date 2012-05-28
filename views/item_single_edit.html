@@ -3,7 +3,7 @@
 <CENTER>
 
 <FORM NAME="singleItemForm" ID="singleItemForm" METHOD="post" ACTION="/admin/items/update">
-<INPUT TYPE="hidden" NAME="itemID" VALUE="<%= item._id %>" />
+<INPUT TYPE="hidden" NAME="itemID" VALUE="<%= items._id %>" />
 <TABLE BORDER=0 CLASS="itemSingle">
 <TR>
 <TD ALIGN="right">type of item</TD>
@@ -14,18 +14,15 @@
 </SELECT></TD>
 </TR>
 <TR><TD ALIGN="right" VALIGN="middle">item name</TD>
-<TD><INPUT NAME="itemName" ID="singleItemName" CLASS="ui-widget-content ui-corner-all" VALUE="<%= items.itemName %>"></TD></TR>
+<TD><INPUT NAME="itemName" ID="singleItemName" CLASS="ui-widget-content ui-corner-all" VALUE="<%= items.itemName %>" onBlur="validateName($('#singleItemName'),'SingleItem');"></TD></TR>
 <TR><TD ALIGN="right" VALIGN="middle">item desc</TD>
-<TD><TEXTAREA NAME="itemDesc" ID="singleItemDesc" CLASS="ui-widget-content ui-corner-all" ROWS=3 COLS=40><%= items.itemDesc %></TEXTAREA></TD></TR>
+<TD><TEXTAREA NAME="itemDesc" ID="singleItemDesc" CLASS="ui-widget-content ui-corner-all" ROWS=3 COLS=20><%= items.itemDesc %></TEXTAREA></TD></TR>
 <TR><TD ALIGN="right" VALIGN="middle">cost</TD>
-<TD><INPUT TYPE="text" NAME="itemCost" ID="singleItemCost" VALUE="<%= items.itemCost.toFixed(2) %>" CLASS="ui-widget-content ui-corner-all" PLACEHOLDER=" no $, just x.xx" onBlur="validateNum($('#itemCost'));" /></TD></TR>
+<TD><INPUT TYPE="text" NAME="itemCost" ID="singleItemCost" VALUE="<%= items.itemCost.toFixed(2) %>" CLASS="ui-widget-content ui-corner-all" PLACEHOLDER=" no $, just x.xx" onBlur="validateNum($('#singleItemCost'));" /></TD></TR>
 <TR><TD ALIGN="right" VALIGN="middle">calories</TD>
-<TD><INPUT TYPE="text" NAME="itemCalories" ID="singleItemCalories" VALUE="<%= items.itemCalories %>" CLASS="ui-widget-content ui-corner-all" onBlur="validateNum($('#itemCalories'));" /></TD></TR>
+<TD><INPUT TYPE="text" NAME="itemCalories" ID="singleItemCalories" VALUE="<%= items.itemCalories %>" CLASS="ui-widget-content ui-corner-all" onBlur="validateNum($('#singleItemCalories'));" /></TD></TR>
 <TR><TD></TD><TD><BR /><INPUT NAME="updateItem" TYPE="submit" ID="updateItem" VALUE="update the item!" CLASS="ui-widget-content ui-corner-all" /></TD></TR></FORM>
 </TABLE>
-
-<!-- DIV confirms successful AJAX post msg -->
-<DIV ID="updated" CLASS="infoMsg ui-widget-content ui-corner-all" STYLE="display: none;"></DIV>
 
 </CENTER>
 

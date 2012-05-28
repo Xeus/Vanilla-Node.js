@@ -36,16 +36,16 @@ $(function() {
 			dataType: "json",
 			success: function(response) {
 				if (response.status === "OK") {
-          $("#updated").fadeToggle(300).html("Item updated!").fadeToggle(300);
+          $("#updated").fadeToggle(3000).html("Item updated!").fadeToggle(3000);
         }
         else {
-        	$("#updated").fadeToggle(300).html("There was an error updating the item.").fadeToggle(300);
+        	$("#updated").fadeToggle(3000).html("There was an error updating the item.").fadeToggle(3000);
         }
       }, 
       error : function(error) {
         console.log("There was an error updating the item.");
         console.log(error);
-        $("#updated").fadeToggle(300).html("There was an error updating the item.").fadeToggle(300);
+        $("#updated").fadeToggle(3000).html("There was an error updating the item.").fadeToggle(3000);
       }
 		});
 		e.preventDefault();

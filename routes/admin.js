@@ -5,6 +5,8 @@
 /* Module dependencies. */
 var db = require('../accessDB');
 
+var itemTypeList = ['Beer','Food','Liquor','Wine'];
+
 module.exports = {
 
     // ******** ADMIN STUFF *************
@@ -15,10 +17,9 @@ module.exports = {
 
             if (err) {
                 //an error occurred
-                console.log("something went wrong");
+                console.log("Something went wrong.");
             }
             else {
-                var itemTypeList = ['Beer','Food','Liquor','Wine'];
 
                 templateData = {
                     pageTitle : "Admin Dashboard",
@@ -37,11 +38,12 @@ module.exports = {
 
             if (err) {
                 //an error occurred
-                console.log("something went wrong");
+                console.log("Something went wrong.");
             }
             else {
                 templateData = {
-                    items : items
+                    items : items,
+                    layout : false
                 };
                 response.render('item_list.html', templateData);
             }
@@ -49,7 +51,7 @@ module.exports = {
     },
 
     addItem: function(request, response) {
-        console.log("additem fired");
+        console.log("addItem fired");
         // Prepare the blog post entry form into a data object
         var itemData = {
             itemName : request.body.itemName,
@@ -61,18 +63,18 @@ module.exports = {
 
         // create a new menu item
         var item = new db.Items(itemData);
-
-        // save the item
         item.save();
         
         if (request.xhr) {
             response.json({
                 status : 'OK',
-                msg : 'New item added!'
+                msg : 'New item added!',
+                itemName : request.body.itemName,
+                itemID : item._id
             });
         }
         else {
-            response.render('/menu');
+            response.render('admin_dashboard.html');
         }
 
     },
@@ -109,11 +111,9 @@ module.exports = {
     },
 
     deleteItem: function(request, response) {
-        console.log(response);
         db.Items.findOne({ _id : request.body.itemID }, function (err, delItem) {
             console.log("fired");
             if (err) {
-                //an error occurred
                 console.log("Failed to remove item.");
             }
             else {
@@ -124,7 +124,6 @@ module.exports = {
                             status : 'OK',
                             msg : 'Item deleted.'
                         });
-                        console.log(response);
                     }
                 });
             }
@@ -133,61 +132,70 @@ module.exports = {
     },
 
     deleteEmbed: function(request, response) {
-        console.log(response);
-        db.Embeds.findOne({ _id : request.body.embedID }, function (err, delEmbed) {
-            console.log("fired");
+        db.Items.findOne({ _id : request.body.itemID }, function (err, delEmbed) {
+            console.log("deleteEmbed fired");
             if (err) {
-                //an error occurred
-                console.log("Failed to remove embed.");
+                console.log("Failed to find embed.");
             }
             else {
-                db.Embeds.remove({ "_id" : delEmbed._id }, function (err, success) {
-                    if (err) {
-                        response.json({
-                            status : 'FAIL',
-                            msg : 'There was an error deleting the embed.'
-                        });
+                // hacky way to get rid of embeds
+                for (var i=0; i<delEmbed.embeds.length; i++) {
+                    if (delEmbed.embeds[i]._id == request.body.embedID) {
+                        delEmbed.embeds.splice(i, 1);
                     }
-                    else {
-                        response.json({
-                            status : 'OK',
-                            msg : 'Embed deleted.'
-                        });
-                    }
+                }
+                delEmbed.markModified("embeds");
+                delEmbed.save(function() {
+                    response.json({
+                        status : 'OK',
+                        msg : 'Embed deleted.'
+                    });
                 });
             }
         
         });
     },
 
-    // edit one flow via ajax
+    // edit one item via ajax
     editItem: function(request, response) {
-        db.Items.findOne({ itemID: request.params.itemID }, function (err, items) {
+        db.Items.findOne({ _id : request.params.itemID }, function (err, items) {
 
             if (err) {
-                //an error occurred
-                console.log("something went wrong");
+                console.log("Something went wrong.");
                 console.log(err);
             }
             else {
-                if (request.xhr) {
-                    response.json({
-                        status :'OK'
-                    });
+                var templateData = {
+                    items : items,
+                    itemTypeList : itemTypeList
                 }
-                else {
-                    request.flash('updated', 'Item updated!');
-                }
+                response.partial('item_single_edit.html', templateData);
             }
         });
     },
 
-    // edit one flow via ajax
+    // edit one embed via ajax
+    editEmbed: function(request, response) {
+        db.Items.findOne({ _id : request.params.itemID }, function (err, items) {
+
+            if (err) {
+                console.log("Something went wrong.");
+                console.log(err);
+            }
+            else {
+                var templateData = {
+                    items : items
+                }
+                response.partial('embed_single_edit.html', templateData);
+            }
+        });
+    },
+
+    // creates belongsTo list
     belongs: function(request, response) {
         db.Items.find({}, function (err, items) {
 
             if (err) {
-                //an error occurred
                 console.log("something went wrong");
                 console.log(err);
             }
@@ -208,34 +216,35 @@ module.exports = {
 
     // updates one flow via ajax
     updateItem: function(request, response) {
-        var requestedItem = request.body.data.itemID;
+        var requestedItem = request.body.itemID;
 
         // find the requested document
-        db.Item.findOne({ itemID: requestedItem }, function(err, item) {
+        db.Items.findOne({ _id : requestedItem }, function(err, item) {
             if (err) {
-                //an error occurred
                 console.log("Something went wrong!");
                 console.log(err);
             }
-            else if (item === null ) {
+            else if (item === null) {
                 console.log('Item not found.');
-                response.send("Uh oh, can't find that item.");
+                if (request.xhr) {
+                    response.json({
+                        status : 'OK',
+                        msg : 'Item not found!'
+                    });
+                }
             }
             else {
-                var newData = request.body.data;
-                item.itemName = newData.itemName;
-                item.itemDesc = newData.itemDesc;
-                item.itemCost = newData.itemCost;
-                item.itemCalories = newData.itemCalories;
-                item.save(function(err) {
-                    if (err) { console.log(err); }
-                    else if (request.xhr) {
-                        response.json({
-                            status : 'OK',
-                            msg : 'Item updated!'
-                        });
-                    }
-                });
+                item.itemName = request.body.itemName;
+                item.itemDesc = request.body.itemDesc;
+                item.itemCost = request.body.itemCost;
+                item.itemCalories = request.body.itemCalories;
+                item.save();
+                if (request.xhr) {
+                    response.json({
+                        status : 'OK',
+                        msg : 'Item updated!'
+                    });
+                }
             }
         });
 
@@ -245,77 +254,32 @@ module.exports = {
         var itemID = request.body.itemID;
         var embedID = request.body.embedID;
 
-        db.Items.findById(itemID, function(err, items) {
+        db.Items.findOne({ _id : itemID }, function(err, items) {
             if (err) { console.log(err); }
             else {
                 for (var i=0;i<items.embeds.length;i++) {
-                    if (items.embeds[i].embedName == request.body.embedOld) {
-                        var newCost = parseFloat(request.body.optionCost);
+                    if (items.embeds[i]._id == request.body.embedID) {
+                        var newCost = parseFloat(request.body.embedCost);
                         items.embeds[i].embedName = request.body.embedName;
                         items.embeds[i].embedDesc = request.body.embedDesc;
                         items.embeds[i].embedCost = newCost;
                     }
                 }
                 items.markModified("embeds");
-                items.save(function(err) {
-                    if (err) { console.log(err); }
-                    else if (request.xhr) { // if request sent via AJAX
-                        console.log("Update succeeded.");
-                        response.json({
-                            status : "OK",
-                            msg : "Embed updated!"
-                        });
-                    }
-                });
+                items.save();
+                if (request.xhr) { // if request sent via AJAX
+                    console.log("Update succeeded.");
+                    response.json({
+                        status : "OK",
+                        msg : "Embed updated!"
+                    });
+                }
+                else {
+                    console.log("hi");
+                }
             }
         });
 
-    },
-
-    reset : function(request, response) {
-        
-        //reset the main processing document
-        // this example app uses a single document named 'main'
-        // each time Processing opens, we will reset this document for example purposes only.
-        
-        var conditions = { name: 'main' }
-        var options = { upsert: true, multi: false };
-          
-        var theCircles = [];
-        theCircles.push({
-              color : 'FF0000'
-            , xpos : 10
-            , ypos : 10
-            , size : 10
-        });
-
-        theCircles.push({
-              color : '000FF0'
-            , xpos : 45
-            , ypos : 100
-            , size : 30
-        });
-        
-        
-        
-        var updateData = {
-            name : 'main',
-            circles : theCircles,
-            texts : ['apple','turtle','zebra'],
-            updated: Date.now()
-        }
-        
-        db.Processing.update(conditions, updateData, options, function(err, numAffected) {
-            if (err) {
-                console.error("an error occurred");
-                console.error(err);
-            }
-            
-            if (numAffected) {
-                data = {'status' : 'reset'};
-                response.json(data);
-            }
-        });
     }
 
 

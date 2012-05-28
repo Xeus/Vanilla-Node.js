@@ -1,10 +1,13 @@
 <H4 CLASS="header formTable">item list (see <A HREF="/items/json">JSON</A>)</H4>
 <% if (items.length != 0) { %>
-<UL>
+<UL ID="ulItemList">
 <!-- TODO: need to display contents when modifyItem opened -->
 <% for (var i=0; i<items.length; i++) { %>
 <LI ID="bullet<%= items[i]._id %>"><DIV CLASS="showMenu" ID="<%= items[i]._id %>"><%= items[i].itemName %> <SPAN CLASS="modifyItem">[ <A HREF="#" CLASS="editItem" TITLE="<%= items[i]._id %>">edit</A> | <A HREF="#" CLASS="deleteItem" TITLE="<%= items[i]._id %>">delete</A> ]</SPAN> 
-<DIV ID="itemContents<%= items[i]._id %>" STYLE="display: none;">item info</DIV><DIV ID="embedContents<%= i %>" STYLE="display: none;"></DIV>
+<DIV ID="itemContents<%= items[i]._id %>" STYLE="display: none;">item info</DIV>
+<% for (var j=0; j<items[i].embeds.length; j++) { %>
+<DIV ID="embedContents<%= items[i]._id %>" STYLE="display: none;">embed info</DIV>
+<% } %>
 </DIV></LI>
 <% } %>
 </UL>

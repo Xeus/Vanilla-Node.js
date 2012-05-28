@@ -94,7 +94,7 @@ module.exports = {
                 response.send("an error occurred");
             }
             else {
-                var templateData {
+                var templateData = {
                     pageTitle : "All Users",
                     users : users
                 }

@@ -18,10 +18,7 @@
 <TR>
 <TD ALIGN="right">type of item</TD>
 <TD><SELECT NAME="itemType" ID="itemType">
-<% if (itemTypeList !== null) { for (var i=0; i<itemTypeList.length; i++) { %>
-<OPTION VALUE="<%= itemTypeList[i] %>"><%= itemTypeList[i] %></OPTION>
-<% } } else { %>
-<OPTION></OPTION> <% } %>
+<% if (itemTypeList !== null) { for (var i=0; i<itemTypeList.length; i++) { %><OPTION VALUE="<%= itemTypeList[i] %>"><%= itemTypeList[i] %></OPTION><% } } else { %><OPTION></OPTION><% } %>
 </SELECT></TD>
 </TR>
 <TR><TD ALIGN="right">name</TD><TD><INPUT TYPE="text" NAME="itemName" ID="itemName" CLASS="ui-widget-content ui-corner-all" onBlur="validateName($('#itemName'),'Item');" /></TD></TR>
@@ -31,8 +28,9 @@
 <TR><TD></TD><TD><BR /><BUTTON CLASS="formTable ui-widget-content ui-corner-all" TYPE="submit" ID="addItem">submit</BUTTON></TD></TR>
 </TABLE>
 </FORM>
-
+<BR />
 <SPAN><SPAN ID="addItemStatus" CLASS="infoMsg ui-widget-content ui-corner-all" STYLE="display: none;"></SPAN>&nbsp; </SPAN>
+<BR />
 
 <HR NOSHADE SIZE=1>
 
@@ -44,8 +42,7 @@
 <TR>
 <TD ALIGN="right">belongs to</TD>
 <TD><SELECT NAME="embedList" ID="embedList">
-<% for (var i=0; i<items.length; i++) { %>
-<OPTION VALUE="<%= items[i]._id %>"><%= items[i].itemName %></OPTION>
+<% for (var i=0; i<items.length; i++) { %><OPTION ID="belongsTo_<%= items[i].id %>" VALUE="<%= items[i]._id %>"><%= items[i].itemName %></OPTION>
 <% } %>
 </SELECT></TD>
 </TR>
@@ -56,15 +53,246 @@
 </TABLE>
 
 </FORM>
-
-<SPAN><SPAN ID="addEmbedStatus" CLASS="infoMsg ui-widget-content ui-corner-all" STYLE="display: none;"></SPAN>&nbsp; </SPAN>
+<BR />
+<DIV><SPAN ID="addEmbedStatus" CLASS="infoMsg ui-widget-content ui-corner-all" STYLE="display: none;"></SPAN>&nbsp; </DIV>
+<BR />
 
 </CENTER></TD>
 </TR></TABLE> <!-- /bodyTable -->
 
-<script type="text/javascript">
+<!-- DIV confirms successful AJAX post msg -->
+<DIV ID="singleItemStatus" CLASS="infoMsg ui-widget-content ui-corner-all" STYLE="display: none;"></DIV><BR />
+
+<div id="dialog-confirm" title="Are you sure you want to delete this?" style="display: none;">
+    <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>This embed will be permanently deleted and cannot be recovered. Are you sure?</p>
+</div>
+
+<SCRIPT TYPE="text/javascript">
+
+$(function() {
+
+    itemList.load('/admin/list'); // refreshes left list
+
+    $('#addItem').click(function(e) {
+        var formData = $('#itemForm').serialize();
+        if ($('#itemName').val() != '') {
+            $.ajax({
+                url: "/admin/items/add",
+                type: "POST",
+                data: formData,
+                dataType: "json",
+                success: function(response) {
+                    if (response.status == "OK") {
+                        $("#embedList").prepend('<OPTION ID="belongsTo_' + response.itemID + '" VALUE="' + response.itemID + '">' + response.itemName + '</OPTION>');
+                        itemList.load('/admin/list'); // refreshes left list
+                        addItemStatus.html(response.msg).fadeToggle(300).delay(3000).fadeToggle(300);
+                        textBoxes.val('');
+                        $("input").css('background','white');
+                    }
+                    else {
+                        addItemStatus.html("There was an error adding the item.").fadeToggle(300).delay(3000).fadeToggle(300);
+                    }
+                }, 
+                error : function(error) {
+                    console.log("There was an error updating the item.");
+                    console.log(error);
+                    addItemStatus.html("There was an error adding the item.").fadeToggle(300).delay(3000).fadeToggle(300);
+                }
+            });
+        }
+        else {
+            addItemStatus.html("You didn't enter a name.").fadeToggle(300).delay(3000).fadeToggle(300);
+        }
+        e.preventDefault();
+        return false;
+    });
+    // TODO: embed code for embedded docs not working yet but will look similar to code for adding items
+    $("#addEmbed").click(function(e) {
+        if ($('#embedName').val() != '') {
+            $.ajax({
+                url : '/admin/items/addEmbed',
+                type : 'POST',
+                data : $("#embedForm").serialize(), 
+                dataType : 'json',
+                
+                success : function(response) {
+                    if (response.status == "OK") {
+                        addEmbedStatus.html(response.msg).fadeToggle(300).delay(3000).fadeToggle(300);
+                        //clear the form
+                        textBoxes.val('');
+                        $("input").css('background','white');
+                        // TODO: append instead of load
+                        itemList.load('/admin/list'); // refreshes left list
+                    }
+                    else {
+                        addEmbedStatus.html("There was a partial error adding the embed.").fadeToggle(300).delay(3000).fadeToggle(300);
+                    }
+                }, 
+                error : function(error) {
+                    console.log("There was an error");
+                    console.log(error);
+                    addEmbedStatus.html("There was an error adding the embed.").fadeToggle(300).delay(3000).fadeToggle(300);
+                }
+            });
+        }
+        else {
+            addEmbedStatus.html("You didn't enter a name.").fadeToggle(300).delay(3000).fadeToggle(300);
+        }
+        e.preventDefault();
+        return false;
+    });
+    $('.editItem').live('click', function(e) {
+        var idToEdit = $(this).attr('title');
+        $('#itemContents' + idToEdit).toggle();
+        $('#embedContents' + idToEdit).toggle();
+        if ($(this).html() === "edit") {
+            $(this).html("hide");
+            $("#itemContents" + idToEdit).load("/admin/items/" + idToEdit + "/edit");
+            $("#embedContents" + idToEdit).load("/admin/embeds/" + idToEdit + "/edit");
+        }
+        else {
+            $(this).html("edit");
+        }
+        e.preventDefault();
+        return false;
+    });
+    $('.deleteItem').live('click', function(e) {
+        var deletedEntry = this;
+        $("#dialog-confirm").toggle();
+        $("#dialog-confirm").dialog({
+            resizable: false,
+            height:140,
+            modal: true,
+            buttons: {
+                "Delete This Item": function() {
+                    $(this).dialog( "close" );
+                    var idToDelete = $(deletedEntry).attr('title');
+                    var formData = {
+                        itemID : idToDelete
+                    }
+                    $.ajax({
+                        url: "/admin/items/delete",
+                        type: "POST",
+                        data: formData,
+                        dataType: "json",
+                        success: function(response) {
+                            if (response.status === "OK") {
+                                $("#bullet" + idToDelete).remove();
+                                singleItemStatus.fadeToggle(300).html(response.msg).delay(3000).fadeToggle(300);
+                                $("OPTION#belongsTo_" + idToDelete).remove();
+                            }
+                            else {
+                                console.log("There was a partial error deleting the item.");
+                            }
+                        }, 
+                        error : function(error) {
+                            console.log("There was an error deleting the item.");
+                            console.log(error);
+                        }
+                    });
+                },
+                Cancel: function() {
+                    $( this ).dialog( "close" );
+                }
+            }
+        });
+        $("#dialog-confirm").toggle();
+        e.preventDefault();
+        return false;
+    });
+
+    $('.deleteEmbed').live('click', function(e) {
+        var deletedEntry = this;
+        $("#dialog-confirm").toggle();
+        $("#dialog-confirm").dialog({
+            resizable: false,
+            height:140,
+            modal: true,
+            buttons: {
+                "Delete This Embed": function() {
+                    $(this).dialog( "close" );
+                    var idToDelete = $(deletedEntry).attr('title');
+                    $.ajax({
+                        url: "/admin/items/deleteEmbed",
+                        type: "POST",
+                        data : $("#embedForm" + idToDelete).serialize(),
+                        dataType: "json",
+                        success: function(response) {
+                            if (response.status == "OK") {
+                                $("#embed" + idToDelete).html('');
+                                singleItemStatus.fadeToggle(300).html(response.msg).delay(3000).fadeToggle(300);
+                            }
+                            else {
+                                console.log("There was a partial error deleting the embed.");
+                            }
+                        }, 
+                        error : function(error) {
+                            console.log("There was an error deleting the embed.");
+                            console.log(error);
+                        }
+                    });
+                },
+                Cancel: function() {
+                    $( this ).dialog( "close" );
+                }
+            }
+        });
+        $("#dialog-confirm").toggle();
+        e.preventDefault();
+        return false;
+    });
+    $('#updateItem').live('click', function(e) {
+        formData = $('#singleItemForm').serialize();
+        $.ajax({
+            url: "/admin/items/update",
+            type: "POST",
+            data: formData,
+            dataType: "json",
+            success: function(response) {
+                if (response.status === "OK") {
+                    singleItemStatus.fadeToggle(300).html(response.msg).delay(3000).fadeToggle(300);
+                }
+                else {
+                    singleItemStatus.fadeToggle(300).html("There was a partial error updating the item.").delay(3000).fadeToggle(300);
+                }
+            }, 
+            error : function(error) {
+                console.log("There was an error updating the item.");
+                console.log(error);
+                singleItemStatus.fadeToggle(300).html("There was an error updating the item.").delay(3000).fadeToggle(300);
+            }
+        });
+        e.preventDefault();
+        return false;
+    });
+    $('.updateEmbedButton').live('click', function(e) {
+        var formID = $(this).attr("title");
+        formData = $("#embedForm" + formID).serialize();
+        $.ajax({
+            url: "/admin/items/updateEmbed",
+            type: "POST",
+            data: formData,
+            dataType: "json",
+            success: function(response) {
+                if (response.status == "OK") {
+                    singleItemStatus.fadeToggle(300).html(response.msg).delay(3000).fadeToggle(300);
+                }
+                else {
+                    singleItemStatus.fadeToggle(300).html("Error!").delay(3000).fadeToggle(300);
+                }
+            }, 
+            error : function(error) {
+                console.log(error);
+                singleItemStatus.fadeToggle(300).html("There was an error updating the embed!").delay(3000).fadeToggle(300);
+            }
+        });
+        e.preventDefault();
+        return false;
+    });
+});
 
 var addItemStatus = $("#addItemStatus");
+var singleItemStatus = $("#singleItemStatus");
 var addEmbedStatus = $("#addEmbedStatus");
 var updated = $("#updated");
 var itemList = $("#itemList");
@@ -96,211 +324,5 @@ var validateNum = function(field) {
         field.css('background', 'red');
     }
 }
-
-$(function() {
-    itemList.load('/admin/list'); // refreshes left list
-	<% for (var i=0; i<items.length; i++) { %>
-	$("#itemLink<%= i %>").click(function() {
-		if ($("#itemLink<%= i %>").html() == "edit") {
-			$("#itemLink<%= i %>").html("hide");
-			$("#itemContents<%= i %>").load("/admin/items/<%= items[i]._id %>/edit");
-            $("#embedContents<%= i %>").load("/admin/embeds/<%= items[i]._id %>/edit");
-        }
-		else {
-			$("#itemLink<%= i %>").html("edit");
-			$("#item<%= i %>").css("border-width", "0px");
-		}
-		$("#itemContents<%= i %>").toggle();
-        $("#embedContents<%= i %>").toggle();
-	});
-	<% } %>
-
-    $('#addItem').click(function(e) {
-        var formData = $('#itemForm').serialize();
-        $.ajax({
-            url: "/admin/items/add",
-            type: "POST",
-            data: formData,
-            dataType: "json",
-            success: function(response) {
-                if (response.status === "OK") {
-                    // TODO: append instead of load
-                    itemList.load('/admin/list'); // refreshes left list
-                    $("#addItemStatus").html(response.msg).fadeToggle(300).delay(3000).fadeToggle(300);
-                    textBoxes.val('');
-                    $("input").css('background','white');
-                    // TODO: append instead of load
-                    $("#embedMenuList").load('/admin/belongs'); // updates embed "belongs to" list to reflect changes
-                }
-                else {
-                    addItemStatus.html("There was an error adding the item.").fadeToggle(300).delay(3000).fadeToggle(300);
-                }
-            }, 
-            error : function(error) {
-                console.log("There was an error updating the item.");
-                console.log(error);
-                addItemStatus.html("There was an error adding the item.").fadeToggle(300).delay(3000).fadeToggle(300);
-            }
-        });
-        e.preventDefault();
-        return false;
-    });
-    // TODO: embed code for embedded docs not working yet but will look similar to code for adding items
-    $("#addEmbed").click(function(e) {
-        $.ajax({
-            url : '/admin/items/addEmbed',
-            type : 'POST',
-            data : $("#embedForm").serialize(), 
-            dataType : 'json',
-            
-            success : function(response) {
-                if (response.status == "OK") {
-                    addEmbedStatus.html(response.msg).fadeToggle(300).delay(3000).fadeToggle(300);
-                    //clear the form
-                    textBoxes.val('');
-                    $("input").css('background','white');
-                    // TODO: append instead of load
-                    itemList.load('/admin/list'); // refreshes left list
-                }
-                else {
-                    addEmbedStatus.html("There was a partial error adding the embed.").fadeToggle(300).delay(3000).fadeToggle(300);
-                }
-            }, 
-            error : function(error) {
-                console.log("There was an error");
-                console.log(error);
-                addEmbedStatus.html("There was an error adding the embed.").fadeToggle(300).delay(3000).fadeToggle(300);
-            }
-            
-        });
-        e.preventDefault();
-        return false;
-    });
-
-    // TODO: editing code does not really exist yet, should open div when "edit" is clicked so you can then edit the item and submit it
-    $('.editItem').live('click', function(e) {
-        var idToEdit = $(this).attr('title');
-        $('#itemContents' + idToEdit).toggle();
-        if ($(this).html() === "edit") {
-            $(this).html("hide");
-            $("#itemContents<%= idToEdit %>").load("/admin/items/<%= idToEdit %>/edit");
-            $("#embedContents<%= idToEdit %>").load("/admin/embeds/<%= idToEdit %>/edit");
-        }
-        else {
-            $(this).html("edit");
-        }
-        e.preventDefault();
-        return false;
-    });
-    $('.deleteItem').live('click', function(e) {
-        var idToDelete = $(this).attr('title');
-        var formData = {
-            itemID : idToDelete
-        }
-        $.ajax({
-            url: "/admin/items/delete",
-            type: "POST",
-            data: formData,
-            dataType: "json",
-            success: function(response) {
-                if (response.status === "OK") {
-                    // TODO: remove instead of load
-                    $("#bullet" + idToDelete).html(response.msg).delay(3000).remove();
-                    alert("test msg then remove");
-                    //$("#embedMenuList").load('/admin/belongs'); // updates embed "belongs to" list to reflect changes
-                }
-                else {
-                    console.log("There was a partial error deleting the item.");
-                }
-            }, 
-            error : function(error) {
-                console.log("There was an error deleting the item.");
-                console.log(error);
-            }
-        });
-        e.preventDefault();
-        return false;
-    });
-
-    $('.deleteEmbed').live('click', function(e) {
-        var idToDelete = $(this).attr('title');
-        var formData = {
-            embedID : idToDelete
-        }
-        $.ajax({
-            url: "/admin/items/deleteEmbed",
-            type: "POST",
-            data: formData,
-            dataType: "json",
-            success: function(response) {
-                if (response.status === "OK") {
-                    $("#bulletEmbed" + idToDelete).html(response.msg);
-                }
-                else {
-                    console.log("There was a partial error deleting the embed.");
-                }
-            }, 
-            error : function(error) {
-                console.log("There was an error deleting the embed.");
-                console.log(error);
-            }
-        });
-        e.preventDefault();
-        return false;
-    });
-    
-    // TODO: update code not functioning yet, should send form via AJAX and update record in db
-    $('#updateItem').live('click', function(e) {
-        formData = $('#singleItemForm').serialize();
-        $.ajax({
-            url: "/admin/items/update",
-            type: "POST",
-            data: formData,
-            dataType: "json",
-            success: function(response) {
-                if (response.status === "OK") {
-                    updated.fadeToggle(300).html(response.msg).delay(3000).fadeToggle(300);
-                }
-                else {
-                    updated.fadeToggle(300).html("There was a partial error updating the item.").delay(3000).fadeToggle(300);
-                }
-            }, 
-            error : function(error) {
-                console.log("There was an error updating the item.");
-                console.log(error);
-                updated.fadeToggle(300).html("There was an error updating the item.").delay(3000).fadeToggle(300);
-            }
-        });
-        e.preventDefault();
-        return false;
-    });
-    <% for (var i=0; i<items.embeds.length; i++) { %>
-    $('#updateEmbed<%= items.embeds[i]._id %>').live('click', function(e) {
-        formData = $('#embedForm<%= items.embeds[i]._id %>').serialize();
-        $.ajax({
-            url: "/admin/items/updateEmbed",
-            type: "POST",
-            data: formData,
-            dataType: "json",
-            success: function(response) {
-                if (response.status == "OK") {
-                    $("#updated<%= items.embeds[i]._id %>").html(response.msg);
-                    $("#updated<%= items.embeds[i]._id %>").fadeToggle(300).delay(3000).fadeToggle(300);
-                }
-                else {
-                    $("#updated<%= items.embeds[i]._id %>").html("There was a partial error updating the embed.");
-                }
-            }, 
-            error : function(error) {
-                console.log("There was an error updating the embed.");
-                console.log(error);
-                $("#updated<%= items.embeds[i]._id %>").html("There was an error updating the embed.");
-            }
-        });
-        e.preventDefault();
-        return false;
-    });
-    <% } %>
-});
 
 </SCRIPT>
