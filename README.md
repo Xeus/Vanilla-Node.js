@@ -67,6 +67,14 @@ It should look like this:
 
 Finally, type `foreman start` to start up the node.js express server.  You could also create a bash alias like this: `alias vanilla='foreman start --env .env -f procfile.dev'` to start up the server with `.env` variables as well as use another node.js module like `forever` or `nodemon` to keep the server running/updated.
 
+## Unit Tests
+
+If you uncomment these sections:
+- `layout.html` :: SCRIPT embeds for needed JS
+- `admin_dashboard.html` :: QUnit HTML elements
+- `admin.js` :: unitTests() call at eof
+then you can run QUnit/Sinon tests on the CRUD AJAX calls to test functionality.
+
 ## Links
 
 - [Github](https://github.com/Xeus/Vanilla-Node.js)
@@ -74,13 +82,12 @@ Finally, type `foreman start` to start up the node.js express server.  You could
 ## TODO:
 
 Search for "TODO:" throughout the code to find things requiring more work/fixes:
-- Unit Tests: incomplete
 - Admin Stats: incomplete
 - Admin User Control Functions: incomplete
 - socket.io Basic Funcs: incomplete
 - User Dashboard: incomplete
-- JSON: complete
 
+- JSON: complete
 - Add Item: complete
 - Add Embedded Item: complete
 - Edit Item: complete
@@ -95,3 +102,4 @@ Search for "TODO:" throughout the code to find things requiring more work/fixes:
 - Add item validation: complete
 - Add embed validation: complete
 - Hard-coded Google Web Fonts example: complete
+- Unit Tests: complete
