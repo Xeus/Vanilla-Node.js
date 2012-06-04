@@ -73,6 +73,7 @@ If you uncomment these sections:
 - `layout.html` :: SCRIPT embeds for needed JS
 - `admin_dashboard.html` :: QUnit HTML elements
 - `admin.js` :: unitTests() call at eof
+
 then you can run QUnit/Sinon tests on the CRUD AJAX calls to test functionality.
 
 ## Links
