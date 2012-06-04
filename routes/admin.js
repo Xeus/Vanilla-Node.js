@@ -125,7 +125,8 @@ module.exports = {
                     else {
                         response.json({
                             status : 'OK',
-                            msg : 'Item deleted.'
+                            msg : 'Item deleted.',
+                            itemID : request.body.itemID
                         });
                     }
                 });
@@ -151,7 +152,8 @@ module.exports = {
                 delEmbed.save(function() {
                     response.json({
                         status : 'OK',
-                        msg : 'Embed deleted.'
+                        msg : 'Embed deleted.',
+                        embedID : request.body.embedID
                     });
                 });
             }

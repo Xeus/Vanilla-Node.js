@@ -9,7 +9,7 @@
 } */
 HTML, BODY, INPUT, BUTTON, SELECT, OPTION, TEXTAREA { font-family: 'Patua One', cursive; font-size: 20pt; }
 HTML, BODY { background: #5F3711; color: white; padding: 0px; margin: 0px; }
-H1, H2, H3, H4 { color: #F3E5AB; }
+H1, H2, H3, H4 { color: #F3E5AB; margin-bottom: 0px;}
 INPUT[type=submit], BUTTON, BUTTON[type=submit], INPUT[type=button] { background: #D4C098; }
 P { font-size: 20pt; text-align: justify;}
 #header, #footer { background: black; color: #F3E5AB; padding: 5px; }

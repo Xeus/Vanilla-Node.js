@@ -111,7 +111,7 @@ var deleteItem = function(formData) {
     dataType: "json",
     success: function(response) {
       if (response.status === "OK") {
-        $("#bullet" + formData.itemID).remove();
+        $("#bullet" + response.itemID).remove();
         singleItemStatus.fadeToggle(300).html(response.msg).delay(3000).fadeToggle(300);
         $("OPTION#belongsTo_" + formData.itemID).remove();
       }
@@ -134,7 +134,7 @@ var deleteEmbed = function(formData) {
     dataType: "json",
     success: function(response) {
       if (response.status == "OK") {
-        $("#embed" + formData.embedID).remove();
+        $("#embed" + response.embedID).remove();
         singleItemStatus.fadeToggle(300).html(response.msg).delay(3000).fadeToggle(300);
       }
       else {
