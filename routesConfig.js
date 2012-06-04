@@ -38,10 +38,11 @@ module.exports = function(app) {
     app.get('/admin/list', adminRoute.displayList);
     app.get('/admin/belongs', adminRoute.belongs);
     app.get('/admin/users', userRoute.getUsers);
+    app.get('/admin/testing', adminRoute.testing);
 
     // ROUTES: json.js
-    app.get('/items/json', jsonRoute.jsonItems);
-    app.get('/all/json', jsonRoute.jsonAll);
+    app.get('/json/v1/items', jsonRoute.jsonItems);
+    app.get('/json/v1/all', jsonRoute.jsonAll);
 
 
 

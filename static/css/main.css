@@ -7,7 +7,7 @@
 	font-weight: normal;
 	src: local('Nova Square'), local('Nova Square'), url('css/NovaSquare.ttf') format('truetype');
 } */
-HTML, BODY, INPUT, BUTTON, SELECT, OPTION, TEXTAREA { font-family: 'Patua One', cursive; }
+HTML, BODY, INPUT, BUTTON, SELECT, OPTION, TEXTAREA { font-family: 'Patua One', cursive; font-size: 20pt; }
 HTML, BODY { background: #5F3711; color: white; padding: 0px; margin: 0px; }
 H1, H2, H3, H4 { color: #F3E5AB; }
 INPUT[type=submit], BUTTON, BUTTON[type=submit], INPUT[type=button] { background: #D4C098; }
@@ -27,3 +27,4 @@ A:hover { color: white;}
 #pageTable { padding-left: 20px; padding-right: 20px;}
 #singleItemStatus { position: fixed; bottom: 1em; left: 1em; }
 .updateEmbed TD, .updateEmbed BUTTON, .updateEmbed INPUT, .updateEmbed TEXTAREA { font-size: 12pt;}
+.ui-dialog { font-size: 8pt !important;}

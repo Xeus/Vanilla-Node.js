@@ -69,7 +69,7 @@ module.exports = {
             response.json({
                 status : 'OK',
                 msg : 'New item added!',
-                itemName : request.body.itemName,
+                itemName : itemData.itemName,
                 itemID : item._id
             });
         }
@@ -80,8 +80,9 @@ module.exports = {
     },
 
     addEmbed: function(request, response) {
-
-        db.Items.findOne({_id : request.body.embedList}, function(err, items){
+        console.log(request.body);
+        db.Items.findOne({_id : request.body.embedList}, function(err, item){
+            console.log(item);
             // Prepare the blog post entry form into a data object
             var embedCost = request.body.embedCost;
             if (embedCost == null || embedCost == "undefined" || embedCost == "") {
@@ -97,13 +98,15 @@ module.exports = {
             var embedItem = new db.Embeds(embedData);
 
             // save the item
-            items.embeds.push(embedItem);
-            items.save();
+            item.embeds.push(embedItem);
+            item.save();
             
             if (request.xhr) {
                 response.json({
                     status : 'OK',
-                    msg : "New embed added!"
+                    msg : "New embed added!",
+                    embedName : embedData.embedName,
+                    embedID : embedItem._id
                 });
             }
         });
@@ -280,6 +283,10 @@ module.exports = {
             }
         });
 
+    },
+
+    testing: function(request, response) {
+        response.render("testqunit.html", {layout: false});
     }
 
 

@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+                    "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <script src="http://code.jquery.com/jquery-latest.js"></script>
+  <link rel="stylesheet" href="http://code.jquery.com/qunit/git/qunit.css" type="text/css" media="screen" />
+  <script type="text/javascript" src="http://code.jquery.com/qunit/git/qunit.js"></script>
+  <script type="text/javascript" src="../js/sinon.js"></script>
+  <script type="text/javascript" src="../js/sinon-qunit.js"></script>
+  <script type="text/javascript" src="../js/admin.js"></script>
+
+  <script>
+$(document).ready(function(){
+    
+test("a basic test example", function() {
+  ok( true, "this test is fine" );
+  var value = "hello";
+  equal( value, "hello", "We expect value to be hello" );
+});
+
+module("Module A");
+
+test("first test within module", function() {
+  ok( true, "all pass" );
+});
+
+test("second test within module", function() {
+  ok( true, "all pass" );
+});
+
+module("Module B");
+
+test("some other test", function() {
+  expect(2);
+  notEqual( true, false, "failing test" );
+  equal( true, true, "passing test" );
+});
+
+module("Sinon.js Setup");
+
+test("Using spies", function () {
+    var spy = sinon.spy();
+    spy();
+
+    ok(spy.called);
+    ok(spy.calledOnce);
+});
+
+test("Stubbing global environments", function () {
+    this.stub(jQuery, "ajax");
+    jQuery.ajax("/url", {});
+
+    ok(jQuery.ajax.called);
+});
+
+test("Some timing stuff", function () {
+    var spy = this.spy();
+    setTimeout(spy, 150);
+
+    this.clock.tick(149);
+    ok(!spy.called);
+
+    this.clock.tick(1);
+    ok(spy.called);
+});
+
+// thx http://stackoverflow.com/questions/941133/qunit-with-ajax-qunit-passes-the-failing-tests
+// also http://stackoverflow.com/questions/9431597/unit-testing-ajax-requests-with-qunit
+module("Testing vanilla server");
+
+/* in your code */
+var X = function () {
+  this.fire = function () {
+    return $.ajax({
+      type: 'GET',
+      url: X.url
+    });
+  };
+};
+
+// create a function that counts down to `start()`
+function createAsyncCounter(count) {
+    count = count || 1; // count defaults to 1
+    return function () { --count || start(); };
+}
+
+var countDown = createAsyncCounter(1)
+
+asyncTest("Server response", function() {
+
+  var x = new X;
+  x.url = "http://localhost:5000/"; // the production url
+  // A `done` callback is the same as adding a `success` handler
+  // in the ajax options. It's called after the "real" success handler.
+  // I'm assuming here, that `fire()` returns the xhr object
+  x.fire().done(function(data, status, jqXHR) {
+    ok(status, "success");
+    equal(jqXHR.status, "200", "Server responded with Code 200.");
+  }).always(countDown); // call `countDown` regardless of success/error
+});
+
+asyncTest("CRUD Tests", function() {
+
+  /* in your code */
+  var addItemTest = function(formData) {
+    this.fire = function(formData) {
+      return addItem(formData);
+    };
+  };
+
+  // create a function that counts down to `start()`
+  function createAsyncCounter(count) {
+      count = count || 1; // count defaults to 1
+      return function () { --count || start(); };
+  }
+
+  var countDown = createAsyncCounter(1)
+
+  // A `done` callback is the same as adding a `success` handler
+  // in the ajax options. It's called after the "real" success handler.
+  // I'm assuming here, that `fire()` returns the xhr object
+  var addItemTestRun = new addItemTest;
+  var formData = 'itemType=Beer&itemName=testItem&itemDesc=testDesc&itemCost=10&itemCalories=100';
+  addItem(formData).done(function(data, status, jqXHR) {
+    console.log(jqXHR);
+    var responseText = jQuery.parseJSON(jqXHR.responseText);
+    equal(responseText.status, "OK", "Server responded with 'OK'.");
+    equal(responseText.msg, "New item added!", "Server responded with correct add-item text.");
+    equal(responseText.itemName, "testItem", "Server responded with correct add-item name.");
+  }).always(countDown); // call `countDown` regardless of success/error
+});
+
+
+
+}); // document ready
+  </script>
+  
+</head>
+<body>
+ <h1 id="qunit-header">QUnit example</h1>
+ <h2 id="qunit-banner"></h2>
+ <div id="qunit-testrunner-toolbar"></div>
+ <h2 id="qunit-userAgent"></h2>
+ <ol id="qunit-tests"></ol>
+ <div id="qunit-fixture">test markup, will be hidden</div>
+</body>
+</html>
