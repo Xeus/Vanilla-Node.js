@@ -8,7 +8,6 @@ module.exports = {
     // app.get('/'...)
     // userRoute.index
     index: function(request, response) {
-      
         templateData = {}
         response.render('index.html', templateData);
     },

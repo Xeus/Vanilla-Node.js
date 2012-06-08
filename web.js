@@ -8,6 +8,7 @@ var express = require('express')
   , DB = require('./accessDB').AccessDB
   , mongoStore = require('connect-mongodb');
 
+require('colors');
 
 var app = module.exports = express.createServer();
 global.app = app;
@@ -57,6 +58,6 @@ require('./routesConfig')(app);
 // Make server turn on and listen at defined PORT (or port 5000 if is not defined)
 var port = process.env.PORT || 5000;
 app.listen(port, function() {
-  console.log('Listening on ' + port);
+  console.log('Listening on port '.white.bold + port.white.bold);
 
 });

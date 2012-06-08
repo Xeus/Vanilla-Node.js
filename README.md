@@ -38,6 +38,7 @@ An example [Google Web Fonts](http://www.google.com/webfonts) source is linked.
           , "passport" : ""
           , "passport-local" : ""
           , "socket.io" : ""
+          , "colors" : ""
         } }
 
 ## Credits

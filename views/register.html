@@ -7,13 +7,13 @@
 
 <TABLE CELLPADDING=10>
 <TR><TD ALIGN="right" WIDTH="35%"><label for="firstname">first name</label></TD>
-<TD><input type="text" name="firstname" id="firstname" class="login ui-widget-content ui-corner-all"></TD>
+<TD><input type="text" name="firstname" id="firstname" class="login ui-widget-content ui-corner-all" REQUIRED></TD>
 <TR><TD ALIGN="right"><label for="lastname">last name</label></TD>
-<TD><input type="text" name="lastname" id="lastname" class="login ui-widget-content ui-corner-all"></TD></TR>
+<TD><input type="text" name="lastname" id="lastname" class="login ui-widget-content ui-corner-all" REQUIRED></TD></TR>
 <TR><TD ALIGN="right"><label for="email">email</label></TD>
-<TD><input type="text" name="email" id="email" placeholder=" email@email.com" class="login ui-widget-content ui-corner-all"></TD></TR>
+<TD><input type="email" name="email" id="email" placeholder=" email@email.com" class="login ui-widget-content ui-corner-all" REQUIRED></TD></TR>
 <TR><TD ALIGN="right"><label for="password">password</label></TD>
-<TD><input type="password" name="password" id="password" class="login ui-widget-content ui-corner-all" placeholder=" (at least 8 chars)"></TD></TR>
+<TD><input type="password" name="password" id="password" class="login ui-widget-content ui-corner-all" placeholder=" (at least 8 chars)" REQUIRED /></TD></TR>
 
 <TR><TD COLSPAN=2 ALIGN="center"><BR /><BUTTON ID="register" type="submit" CLASS="login ui-widget-content ui-corner-all">register</BUTTON></TD></TR>
 </TABLE>

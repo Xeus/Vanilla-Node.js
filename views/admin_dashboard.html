@@ -33,11 +33,11 @@
 <% if (itemTypeList !== null) { for (var i=0; i<itemTypeList.length; i++) { %><OPTION VALUE="<%= itemTypeList[i] %>"><%= itemTypeList[i] %></OPTION><% } } else { %><OPTION></OPTION><% } %>
 </SELECT></TD>
 </TR>
-<TR><TD ALIGN="right">name</TD><TD><INPUT TYPE="text" NAME="itemName" ID="itemName" CLASS="ui-widget-content ui-corner-all" onBlur="validateName($('#itemName'),'Item');" /></TD></TR>
+<TR><TD ALIGN="right">name</TD><TD><INPUT TYPE="text" NAME="itemName" ID="itemName" CLASS="ui-widget-content ui-corner-all" onBlur="validateName($('#itemName'),'Item');" REQUIRED /></TD></TR>
 <TR><TD ALIGN="right">description</TD><TD><INPUT TYPE="text" NAME="itemDesc" ID="itemDesc" CLASS="ui-widget-content ui-corner-all" /></TD></TR>
 <TR><TD ALIGN="right">cost</TD><TD><INPUT TYPE="text" NAME="itemCost" ID="itemCost" PLACEHOLDER=" no $, just x.xx" CLASS="ui-widget-content ui-corner-all" onBlur="validateNum($('#itemCost'));" /></TD></TR>
 <TR><TD ALIGN="right">calories</TD><TD><INPUT TYPE="text" NAME="itemCalories" ID="itemCalories" CLASS="ui-widget-content ui-corner-all" onBlur="validateNum($('#itemCalories'));" /></TD></TR>
-<TR><TD></TD><TD><BR /><BUTTON CLASS="formTable ui-widget-content ui-corner-all" TYPE="submit" ID="addItem">submit</BUTTON></TD></TR>
+<TR><TD></TD><TD><BR /><BUTTON CLASS="formTable ui-widget-content ui-corner-all" TYPE="submit" ID="addItem">add</BUTTON></TD></TR>
 </TABLE>
 </FORM>
 <BR />
@@ -53,16 +53,16 @@
 <TABLE BORDER=0 CLASS="formTable">
 <TR>
 <TD ALIGN="right">belongs to</TD>
-<TD><SELECT NAME="embedList" ID="embedList">
+<TD><SELECT NAME="embedList" ID="embedList" REQUIRED>
 	<OPTION ID="embedListFiller" VALUE="">[choose:]</OPTION>
 <% for (var i=0; i<items.length; i++) { %><OPTION ID="belongsTo_<%= items[i].id %>" VALUE="<%= items[i]._id %>"><%= items[i].itemName %></OPTION>
 <% } %>
 </SELECT></TD>
 </TR>
-<TR><TD ALIGN="right">name</TD><TD><INPUT TYPE="text" NAME="embedName" ID="embedName" CLASS="ui-widget-content ui-corner-all" onBlur="validateName($('#embedName'),'Embed');" /></TD></TR>
+<TR><TD ALIGN="right">name</TD><TD><INPUT TYPE="text" NAME="embedName" ID="embedName" CLASS="ui-widget-content ui-corner-all" onBlur="validateName($('#embedName'),'Embed');" REQUIRED /></TD></TR>
 <TR><TD ALIGN="right">description</TD><TD><INPUT TYPE="text" NAME="embedDesc" ID="embedDesc" CLASS="ui-widget-content ui-corner-all" /></TD></TR>
 <TR><TD ALIGN="right">cost</TD><TD><INPUT TYPE="text" NAME="embedCost" ID="embedCost" CLASS="ui-widget-content ui-corner-all" PLACEHOLDER=" no $, just x.xx" onBlur="validateNum($('#embedCost'));" /></TD></TR>
-<TR><TD></TD><TD><BR /><BUTTON CLASS="formTable ui-widget-content ui-corner-all" TYPE="submit" NAME="addEmbed" ID="addEmbed" STYLE="align:left;">submit</BUTTON></TD></TR>
+<TR><TD></TD><TD><BR /><BUTTON CLASS="formTable ui-widget-content ui-corner-all" TYPE="submit" NAME="addEmbed" ID="addEmbed" STYLE="align:left;">add</BUTTON></TD></TR>
 </TABLE>
 
 </FORM>
